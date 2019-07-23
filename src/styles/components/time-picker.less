@@ -12,7 +12,6 @@
         &-with-seconds{
             min-width: @time-picker-cells-width-with-seconds;
         }
-
         &-list{
             width: @time-picker-cells-width-base;
             max-height: 144px;
@@ -134,6 +133,7 @@
     .@{picker-prefix-cls}-panel-content{
         .@{time-picker-prefix-cls}{
             &-cells{
+                // 天
                 min-width: @time-picker-cells-width-with-date-with-seconds;
                 &-with-seconds{
                     min-width: @time-picker-cells-width-with-date-with-seconds;
@@ -165,4 +165,16 @@
             }
         }
     }
+    .@{picker-prefix-cls}-panel-body{
+        left: 210px;
+        position: absolute;
+        top: 0;
+        background-color: white;
+    }
+}
+.ivu-picker-confirm{
+    width: 427px;
+}
+.ivu-date-picker-header{
+    width: 220px;
 }

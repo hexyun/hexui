@@ -1,7 +1,7 @@
 <template>
     <div :class="[prefixCls + '-body-wrapper']">
-        <div :class="[prefixCls + '-body']">
-            <div :class="[timePrefixCls + '-header']" v-if="showDate">{{ visibleDate }}</div>
+        <div :class="[prefixCls + '-body']" id="time-right">
+            <div :class="[timePrefixCls + '-header']" v-if="showDate">时 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 分</div>
             <div :class="[prefixCls + '-content']">
                 <time-spinner
                     v-ref:time-spinner
@@ -45,7 +45,7 @@
                 date: initTimeDate(),
                 value: '',
                 showDate: false,
-                format: 'HH:mm:ss',
+                format: 'HH:mm',
                 hours: '',
                 minutes: '',
                 seconds: '',

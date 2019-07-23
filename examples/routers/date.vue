@@ -1,5 +1,5 @@
 <template>
-    <Date-picker type="datetime" placeholder="选择日期和时间" style="width: 200px"></Date-picker>
+    <Date-picker type="datetime" format="yyyy-MM-dd HH:mm" prefabtime="2019-07-05 03:03" placeholder="选择日期和时间" @get-time="getTime"></Date-picker>
     <br>
     <Date-picker type="datetime" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间（不含秒）" style="width: 200px"></Date-picker>
     <br>
@@ -9,6 +9,16 @@
 </template>
 <script>
     export default {
-
+        data () {
+            return{
+                time: ''
+            }
+        },
+        methods: {
+            getTime (t) {
+                this.time = t;
+                return this.time;
+            }
+        }
     }
 </script>

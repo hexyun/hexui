@@ -62,7 +62,6 @@
                 <time-picker
                     v-ref:time-picker
                     show-date
-                    v-show="currentView === 'time'"
                     @on-pick="handleTimePick"
                     @on-pick-click="handlePickClick"></time-picker>
             </div>
@@ -268,8 +267,13 @@
 
                 this.resetDate();
             },
-            handleTimePick (date) {
-                this.handleDatePick(date);
+            handleTimePick (value) {
+                // this.handleDatePick(date);
+                this.date.setHours(value.getHours());
+                this.date.setMinutes(value.getMinutes());
+                this.date.setSeconds(value.getSeconds());
+                this.$emit('on-pick', new Date(this.date.getTime()));
+                this.resetDate();
             }
         },
         compiled () {

@@ -139,6 +139,7 @@
         components: { iInput, Drop },
         directives: { clickoutside },
         props: {
+            prefabtime: '',
             format: {
                 type: String
             },
@@ -191,9 +192,22 @@
                 showClose: false,
                 visible: false,
                 picker: null,
-                internalValue: '',
+                internalValue: '2019-07-05 03:03',
                 disableClickOutSide: false    // fixed when click a date,trigger clickoutside to close picker
             };
+        },
+        created () {
+            const value = this.prefabtime;
+            if(!value) return;
+            const formatter = (
+                TYPE_VALUE_RESOLVER_MAP[this.type] ||
+                TYPE_VALUE_RESOLVER_MAP['default']
+            ).formatter;
+            const format = DEFAULT_FORMATS[this.type];
+
+            let data = formatter(value, this.format || format);
+            this.$emit('on-change', data);
+            console.log("created", data);
         },
         computed: {
             opened () {
@@ -235,6 +249,7 @@
                 },
 
                 set (value) {
+                    
                     if (value) {
                         const type = this.type;
                         const parser = (
@@ -372,7 +387,7 @@
                     this.picker = new Vue(this.panel).$mount(this.$els.picker);
                     if (type === 'datetime' || type === 'datetimerange') {
                         this.confirm = true;
-                        this.picker.showTime = true;
+                        this.picker.showTime = false;
                     }
                     this.picker.value = this.internalValue;
                     this.picker.confirm = this.confirm;
@@ -426,7 +441,7 @@
                 if (type === 'daterange' || type === 'timerange') {
                     newDate = [newDate.split(RANGE_SEPARATOR)[0], newDate.split(RANGE_SEPARATOR)[1]];
                 }
-
+                this.$emit('get-time', newDate);
                 this.$emit('on-change', newDate);
                 this.$dispatch('on-form-change', newDate);
             }
