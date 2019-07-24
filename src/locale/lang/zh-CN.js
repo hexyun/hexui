@@ -14,6 +14,7 @@ export default {
         datepicker: {
             selectDate: '选择日期',
             selectTime: '选择时间',
+            now: '现在',
             startTime: '开始时间',
             endTime: '结束时间',
             clear: '清空',

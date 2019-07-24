@@ -1,5 +1,5 @@
 <template>
-    <Date-picker type="datetime" format="yyyy-MM-dd HH:mm" prefabtime="2019-07-05 03:03" placeholder="选择日期和时间" @get-time="getTime"></Date-picker>
+    <Date-picker type="datetime" format="yyyy-MM-dd HH:mm" prefabtime="2019/9/9 10:10:10" placeholder="选择日期和时间" @get-time="getTime"></Date-picker>
     <br>
     <Date-picker type="datetime" format="yyyy-MM-dd HH:mm" placeholder="选择日期和时间（不含秒）" style="width: 200px"></Date-picker>
     <br>

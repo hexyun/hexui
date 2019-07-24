@@ -5,6 +5,7 @@
             <template v-else>{{ t('i.datepicker.selectTime') }}</template>
         </span>
         <i-button size="small" type="text" @click="handleClear">{{ t('i.datepicker.clear') }}</i-button>
+        <i-button size="small" type="text" @click="handleNow">{{ t('i.datepicker.now') }}</i-button>
         <i-button size="small" type="primary" @click="handleSuccess">{{ t('i.datepicker.ok') }}</i-button>
     </div>
 </template>
@@ -44,6 +45,9 @@
             handleToggleTime () {
                 if (this.timeDisabled) return;
                 this.$emit('on-pick-toggle-time');
+            },
+            handleNow () {
+                this.$emit('set-date-now');
             }
         }
     };

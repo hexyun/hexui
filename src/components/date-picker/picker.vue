@@ -192,22 +192,12 @@
                 showClose: false,
                 visible: false,
                 picker: null,
-                internalValue: '2019-07-05 03:03',
+                internalValue: '',
+                index: 0,
                 disableClickOutSide: false    // fixed when click a date,trigger clickoutside to close picker
             };
         },
         created () {
-            const value = this.prefabtime;
-            if(!value) return;
-            const formatter = (
-                TYPE_VALUE_RESOLVER_MAP[this.type] ||
-                TYPE_VALUE_RESOLVER_MAP['default']
-            ).formatter;
-            const format = DEFAULT_FORMATS[this.type];
-
-            let data = formatter(value, this.format || format);
-            this.$emit('on-change', data);
-            console.log("created", data);
         },
         computed: {
             opened () {
@@ -237,19 +227,24 @@
             },
             visualValue: {
                 get () {
-                    const value = this.internalValue;
+                    let value = this.internalValue;
+                    // 设置时间的初始值 ----------
+                    const prefabtime = this.prefabtime;
+                    this.index++;
+                    if (prefabtime && this.index < 3) {
+                        value = prefabtime;
+                    }
+                    // --------------------------
                     if (!value) return;
                     const formatter = (
                         TYPE_VALUE_RESOLVER_MAP[this.type] ||
                         TYPE_VALUE_RESOLVER_MAP['default']
                     ).formatter;
                     const format = DEFAULT_FORMATS[this.type];
-
                     return formatter(value, this.format || format);
                 },
 
                 set (value) {
-                    
                     if (value) {
                         const type = this.type;
                         const parser = (

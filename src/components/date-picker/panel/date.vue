@@ -71,6 +71,7 @@
                 :is-time="isTime"
                 @on-pick-toggle-time="handleToggleTime"
                 @on-pick-clear="handlePickClear"
+                @set-date-now="setTimeNow"
                 @on-pick-success="handlePickSuccess"></Confirm>
         </div>
     </div>
@@ -228,6 +229,9 @@
                     this.currentView = 'date';
                     this.isTime = false;
                 }
+            },
+            setTimeNow () {
+                this.$emit('on-pick', new Date());
             },
             handleYearPick(year, close = true) {
                 this.year = year;
