@@ -74,7 +74,6 @@
         }
         return [];
     };
-
     const TYPE_VALUE_RESOLVER_MAP = {
         default: {
             formatter(value) {
@@ -229,7 +228,7 @@
                 get () {
                     let value = this.internalValue;
                     // 设置时间的初始值 ----------
-                    const prefabtime = this.prefabtime;
+                    const prefabtime = this.formatTime(parseInt(this.prefabtime));
                     this.index++;
                     if (prefabtime && this.index < 3) {
                         value = prefabtime;
@@ -259,7 +258,7 @@
                     }
                     if (this.picker) this.picker.value = value;
                 }
-            }
+            }              
         },
         methods: {
             handleClose () {
@@ -439,6 +438,17 @@
                 this.$emit('get-time', newDate);
                 this.$emit('on-change', newDate);
                 this.$dispatch('on-form-change', newDate);
+            },
+            formatTime (t) {
+                let date = new Date(t);
+                const prefixZero = function (num) {
+                    return num >= 10 ? num : '0' + num;
+                };
+                return date.getFullYear() + '-' +
+                    prefixZero(date.getMonth() + 1) + '-' +
+                    prefixZero(date.getDate()) + ' ' +
+                    prefixZero(date.getHours()) + ':' +
+                    prefixZero(date.getMinutes());
             }
         },
         watch: {
