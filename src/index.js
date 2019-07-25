@@ -39,6 +39,7 @@ import Tooltip from './components/tooltip';
 import Transfer from './components/transfer';
 import Tree from './components/tree';
 import Upload from './components/upload';
+import Step from './components/step';
 import { Row, Col } from './components/layout';
 import { Select, Option, OptionGroup } from './components/select';
 import locale from './locale';
@@ -104,7 +105,8 @@ const hex = {
     Tooltip,
     Transfer,
     Tree,
-    Upload
+    Upload,
+    Step
 };
 
 const install = function (Vue, opts = {}) {
