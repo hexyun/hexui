@@ -1,5 +1,6 @@
 <template>
-  <div class="mask" v-if="isStepShow">
+  <div class="mask" v-show="isStepShow">
+    <Icon type="ios-close-outline" class='close' @click="close"></Icon>
     <div class="maskTop">
       <div
         class="step"
@@ -7,6 +8,7 @@
         :key="index"
         :style="position[index]"
         v-show="actNum==index"
+        :class='{"act":actNum==index}'
       >
         <div class="stepNum">{{item.title}}</div>
         <div class="stepText">{{item.text}}</div>
@@ -89,12 +91,16 @@ export default {
       var actel = document.querySelector("#" + this.list[this.actNum].el);
       actel.style.zIndex = 999;
       actel.style.position = "relative";
+    },
+    close:function(){
+       this.isStepShow = false;
     }
   },
   ready() {
     var self = this;
+    var step=document.querySelectorAll(".step");
+    var mask=document.querySelector(".mask");
     Vue.nextTick(function() {
-      console.log(document.documentElement.offsetHeight);
       // 获取元素距离文档左边和上边的距离
       function getElementLeft(element) {
         var actualLeft = element.offsetLeft;
@@ -113,7 +119,7 @@ export default {
           current = current.offsetParent;
         }
         return actualTop;
-      }
+      } 
       // 能否小于0
       function isLess(i) {
         if (self.isless) {
@@ -124,13 +130,12 @@ export default {
       // 将按钮文字替换成自定义文字
       self.btnText = self.nextText || "下一步";
       // 获取第一个元素
-      console.log(self);
       var actel = document.querySelector("#" + self.list[0].el);
       // 给mask设置高度，如果内容不满一屏幕按照一屏高度，如果超过了就按照文档高度
       document.body.scrollHeight < window.innerHeight
-        ? (document.querySelector(".mask").style.height =
+        ? (mask.style.height =
             window.innerHeight + "px")
-        : (document.querySelector(".mask").style.height =
+        : (mask.style.height =
             document.body.offsetHeight + "px");
 
       // 第一个元素设置样式
@@ -144,17 +149,15 @@ export default {
         var actel = document.querySelector("#" + self.list[i].el);
         // 将除了第一个提示以外的提示设置成visibility隐藏来获取宽高
         if (i != 0) {
-          document.querySelectorAll(".step")[i].style.visibility = "hidden";
-          document.querySelectorAll(".step")[i].style.display = "block";
+          step[i].style.visibility = "hidden";
+          step[i].style.display = "block";
         }
         // 获取元素距离文档左边和上边的距离
-        //let Oleft = getElementLeft(actel);
-        //let Otop = getElementTop(actel);
-        let Oleft = actel.getBoundingClientRect().left + actel.scrollTop;
-        let Otop = actel.getBoundingClientRect().top + actel.scrollLeft;
+        let Oleft = getElementLeft(actel);
+        let Otop = getElementTop(actel);
         // 获取提示框的宽度高度
-        let OWidth = document.querySelectorAll(".step")[i].offsetWidth;
-        let OHeight = document.querySelectorAll(".step")[i].offsetHeight;
+        let OWidth = step[i].offsetWidth;
+        let OHeight = step[i].offsetHeight;
         // 获取元素的宽度和高度
         let OelWidth = actel.offsetWidth;
         let OelHeight = actel.offsetHeight;
@@ -162,21 +165,21 @@ export default {
         let Osize = self.list[i].size;
         console.log(
           i +
-            "方向" +
+            " 方向" +
             self.list[i].position +
-            "左" +
+            " 左" +
             Oleft +
-            "上" +
+            " 上" +
             Otop +
-            "宽" +
+            " 宽" +
             OWidth +
-            "高" +
+            " 高" +
             Otop +
-            "元素宽" +
+            " 元素宽" +
             OelWidth +
-            "元素高" +
+            " 元素高" +
             OelHeight +
-            "偏移值" +
+            " 偏移值" +
             Osize
         );
         // 根据元素里的定位决定提示框的位置
@@ -206,8 +209,8 @@ export default {
         });
         // 获取后改回原来的样式
         if (i != 0) {
-          document.querySelectorAll(".step")[i].style.visibility = "";
-          document.querySelectorAll(".step")[i].style.display = "none";
+          step[i].style.visibility = "";
+          step[i].style.display = "none";
         }
       }
       // 赋值
@@ -226,6 +229,12 @@ export default {
   width: 100%;
   background: rgba(0, 0, 0, 0.6);
   color: #fff;
+  .close{
+    font-size: 40px;
+    position: absolute;
+    right: 1rem;
+    top: 1rem;
+  }
   .maskTop {
     width: 100%;
     height: 100%;
@@ -239,6 +248,13 @@ export default {
     bottom: 10%;
     left: 50%;
     transform: translateX(-50%);
+  }
+  .act{
+    animation: act 1s linear;
+  }
+  @keyframes act {
+    0%{opacity: 0;}
+    100%{opacity: 1;}
   }
 }
 </style>

@@ -271,51 +271,17 @@
     <i-button type="primary" icon="cloud"></i-button>
     <i-button type="primary" icon="upload"></i-button>
   </Button-group>
-  <step :is-step-show="isStepShow" :list="list" v-ref:step></step>
 </template>
 <script>
-import { step } from "hexui";
+import { setTimeout } from 'timers';
 export default {
   props: {},
-  components: {
-    step
-  },
   data() {
     return {
       isStepShow: true,
       loading: true,
       loading2: true,
       model6: "",
-      list: [
-        {
-          title: "步骤一",
-          text: "这是第一个步骤的提示文字",
-          el: "btn1",
-          position: "right",
-          size: 0
-        },
-        {
-          title: "步骤二",
-          text: "这是第二个步骤的提示文字",
-          el: "btn2",
-          position: "bottom",
-          size: 0
-        },
-        {
-          title: "步骤三",
-          text: "这是第三个步骤的提示文字",
-          el: "btn3",
-          position: "left",
-          size: 0
-        },
-        {
-          title: "步骤四",
-          text: "这是第四个步骤的提示文字",
-          el: "btn4",
-          position: "top",
-          size: 0
-        }
-      ],
       cityList: [
         {
           value: "beijing",
@@ -346,9 +312,6 @@ export default {
     };
   },
   methods: {
-    stepShow() {
-      this.$refs.step.stepShow();
-    },
     toLoading() {
       this.loading = true;
     },
