@@ -42,7 +42,7 @@
     </Radio>
   </Radio-group>
   <Radio-group :model.sync="animal" type="button">
-    <Radio value="金斑蝶" id="btn4"></Radio>
+    <Radio value="金斑蝶" id="btn4" style='height:200px'></Radio>
     <Radio value="爪哇犀牛"></Radio>
     <Radio value="印度黑羚"></Radio>
   </Radio-group>
@@ -157,6 +157,64 @@
   <br />
   <Checkbox :checked.sync="single"></Checkbox>
   <step :is-step-show="isStepShow" :list="list" v-ref:step></step>
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
+  <br /> 
 </template>
 <script>
 import {

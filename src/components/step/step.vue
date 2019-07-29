@@ -24,6 +24,7 @@
   </div>
 </template>
 <script>
+import { setTimeout } from 'timers';
 export default {
   data() {
     return {
@@ -44,7 +45,9 @@ export default {
       // 存定位的数组
       position: [],
       // 能否小于0
-      isless: true
+      isless: true,
+      // 存储需要移动的scroll的值
+      scrollT:[]
     };
   },
   // 是否开启,数据列表
@@ -64,6 +67,8 @@ export default {
       var actel = document.querySelector("#" + this.list[0].el);
       actel.style.zIndex = 999;
       actel.style.position = "relative";
+      // 重置第一个元素的滚动条位置
+      document.documentElement.scrollTo(0,this.scrollT[0])
     },
     next() {
       // 重置所有样式
@@ -91,6 +96,8 @@ export default {
       var actel = document.querySelector("#" + this.list[this.actNum].el);
       actel.style.zIndex = 999;
       actel.style.position = "relative";
+      // 滚动到相应的位置
+      document.documentElement.scrollTo(0,this.scrollT[this.actNum])
     },
     close:function(){
        this.isStepShow = false;
@@ -100,7 +107,7 @@ export default {
     var self = this;
     var step=document.querySelectorAll(".step");
     var mask=document.querySelector(".mask");
-    Vue.nextTick(function() {
+    this.$nextTick(function() {
       // 获取元素距离文档左边和上边的距离
       function getElementLeft(element) {
         var actualLeft = element.offsetLeft;
@@ -123,7 +130,7 @@ export default {
       // 能否小于0
       function isLess(i) {
         if (self.isless) {
-          i = i < 0 ? (i = 0) : i + "px";
+          i = i < 0 ? (i = 0) : i;
         }
         return i;
       }
@@ -141,8 +148,10 @@ export default {
       // 第一个元素设置样式
       actel.style.zIndex = 999;
       actel.style.position = "relative";
-      // 创建一个空数组
+      // 创建一个空数组存储定位
       var position = [];
+      // 创建一个空数组存储top值
+      var st=[];
       // 遍历所有的元素
       for (let i = 0; i < self.list.length; i++) {
         // 获取元素
@@ -163,6 +172,8 @@ export default {
         let OelHeight = actel.offsetHeight;
         // 获取偏移值
         let Osize = self.list[i].size;
+        // 获取元素高度和提示框高度哪个大
+        let whichOne=OHeight>OelHeight?OHeight:OelHeight;
         console.log(
           i +
             " 方向" +
@@ -174,13 +185,15 @@ export default {
             " 宽" +
             OWidth +
             " 高" +
-            Otop +
+            OHeight +
             " 元素宽" +
             OelWidth +
             " 元素高" +
             OelHeight +
             " 偏移值" +
-            Osize
+            Osize+
+            "比较大的尺寸"+
+            whichOne
         );
         // 根据元素里的定位决定提示框的位置
         let fLeft = 0;
@@ -188,24 +201,33 @@ export default {
         switch (self.list[i].position) {
           case "left":
             fLeft = isLess(Oleft - OWidth - Osize);
-            fTop = Otop + "px";
+            fTop = Otop ;
+            // 提示框在左边的情况下，滚动条的值=最终定位的高度+提示框和元素中比较高的高度的一半-屏幕高度的一半
+            fTop+whichOne/2>window.innerHeight/2?st.push(fTop+whichOne/2-window.innerHeight/2):st.push(0);
             break;
           case "top":
-            fLeft = Oleft + "px";
+            fLeft = Oleft ;
             fTop = isLess(Otop - OHeight - Osize);
+            //提示框在上的情况下，判断最终定位的左上角+(元素的高度+提示框的高度)/2是否大于屏幕的高度/2
+            //滚动条的值等于元素的左上角加上元素高度/2-屏幕高度的一半
+            fTop+(OelHeight+OHeight)/2>window.innerHeight/2?st.push(fTop+(OelHeight+OHeight)/2-window.innerHeight/2):st.push(0);
             break;
           case "bottom":
-            fLeft = Oleft + "px";
+            fLeft = Oleft;
             fTop = isLess(Otop + OelHeight + Osize);
+            // 提示框在下面的情况下，判断元素定位的高度加上（提示框的高度+元素的高度）/2
+            Otop+(OHeight+OelHeight)/2>window.innerHeight/2?st.push(Otop+(OHeight+OelHeight)/2-window.innerHeight/2):st.push(0);
             break;
           default:
             fLeft = isLess(Oleft + OelWidth + Osize);
-            fTop = Otop + "px";
+            fTop = Otop ;
+            // 提示框在左边的情况下，滚动条的值=最终定位的高度+提示框和元素中比较高的高度的一半-屏幕高度的一半
+            fTop+whichOne/2>window.innerHeight/2?st.push(fTop+whichOne/2-window.innerHeight/2):st.push(0);
             break;
         }
         position.push({
-          left: fLeft,
-          top: fTop
+          left: fLeft+'px',
+          top: fTop+'px'
         });
         // 获取后改回原来的样式
         if (i != 0) {
@@ -213,9 +235,14 @@ export default {
           step[i].style.display = "none";
         }
       }
+      // window.scrollBy
+      // document.documentElement.scrollBy(0,100);
       // 赋值
       self.position = position;
+      self.scrollT=st;
+      console.log(self.scrollT)
     });
+    window.scrollTo(0,0)
   }
 };
 </script>
