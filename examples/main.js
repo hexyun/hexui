@@ -160,6 +160,11 @@ router.map({
             require(['./routers/notice.vue'], resolve);
         }
     },
+    '/calendar': {
+        component: function (resolve) {
+            require(['./routers/calendar.vue'], resolve);
+        }
+    },
     '*': {
 		    component: function (resolve) {
 				    require(['./routers/notice.vue'], resolve);

@@ -440,6 +440,7 @@
                 this.$dispatch('on-form-change', newDate);
             },
             formatTime (t) {
+                if (!t) return '';
                 let date = new Date(t);
                 const prefixZero = function (num) {
                     return num >= 10 ? num : '0' + num;
@@ -494,6 +495,17 @@
                 } else if (val === false) {
                     this.$emit('on-open-change', false);
                 }
+            },
+            prefabtime (val) {
+                if(val) {
+                    this.internalValue = this.formatTime(parseInt(val));
+                } else {
+                    this.internalValue = '';
+                }
+            },
+            internalValue (val) {
+                let time = new Date(val);
+                this.prefabtime = time.getTime();
             }
         },
         beforeDestroy () {

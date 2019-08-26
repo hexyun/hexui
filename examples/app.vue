@@ -52,7 +52,7 @@ li + li {
                 <li><a v-link="'/upload'">Upload</a></li>
                 <li><a v-link="'/tree'">Tree</a></li>
                 <li><a v-link="'/notice'">Notice</a></li>
-                <li><a v-link="'/divider'">Divider</a></li>
+                <li><a v-link="'/calendar'">Calendar</a></li>
             </ul>
         </nav>
         <router-view></router-view>

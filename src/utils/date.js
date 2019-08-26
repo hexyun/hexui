@@ -268,7 +268,7 @@
         format.replace(token, function ($0) {
             if (parseFlags[$0]) {
                 var info = parseFlags[$0];
-                var index = dateStr.search(info[0]);
+                var index = dateStr.search(info[0]) || 0;
                 if (!~index) {
                     isValid = false;
                 } else {

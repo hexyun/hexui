@@ -43,6 +43,7 @@ import Step from './components/step';
 import { Row, Col } from './components/layout';
 import { Select, Option, OptionGroup } from './components/select';
 import locale from './locale';
+import calendar from './components/calendar/calendar';
 
 const hex = {
     Affix,
@@ -54,6 +55,7 @@ const hex = {
     iButton: Button,
     ButtonGroup: Button.Group,
     Card,
+    calendar,
     Carousel,
     CarouselItem: Carousel.Item,
     Cascader,
