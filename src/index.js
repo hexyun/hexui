@@ -44,6 +44,7 @@ import { Row, Col } from './components/layout';
 import { Select, Option, OptionGroup } from './components/select';
 import locale from './locale';
 import calendar from './components/calendar/calendar';
+import loading from './components/loading/loading'
 
 const hex = {
     Affix,
@@ -74,6 +75,7 @@ const hex = {
     iInput: Input,
     InputNumber,
     LoadingBar,
+    loading,
     Menu,
     MenuGroup: Menu.Group,
     MenuItem: Menu.Item,

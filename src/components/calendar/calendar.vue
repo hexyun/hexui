@@ -51,7 +51,7 @@
     <ul class="date" v-show="statu==='days'">
       <li
         v-for="(index,item) in list"
-        :class="{'active': (item.y === currentYear && item.m === currentMonth+1 && item.d === currentDay) || index === selected || (item.y===year && item.m === month && item.d === day)}"
+        :class="{'active': (item.y === currentYear && item.m === (currentM+1) && item.d === currentDay) || index === selected || (item.y===year && item.m === month && item.d === day)}"
         @click="selectedDay(item, index)"
       >
         <div class="day" :class="{'text-color': item.cur}">{{item.d}}</div>
@@ -97,6 +97,7 @@ export default {
       day: new Date().getDate(), // 今日日份
       currentYear: '', // 当前显示年份
       currentMonth: '', // 当前显示月份 0-11,显示时加一
+      currentM: '',
       currentDay: '', // 当前显示日份
       monthDays: [], // 1-12月的天数
       list: [],
@@ -132,13 +133,12 @@ export default {
     if (this.prefab) {
       let prefab = new Date(this.prefab);
       this.currentYear = prefab.getFullYear();
+      this.currentM = prefab.getMonth();
       this.currentMonth = prefab.getMonth();
       this.currentDay = prefab.getDate();
       this.showCalender('prefab');
-      console.log("prefab:", prefab, this.currentYear, this.currentMonth, this.currentDay);
     } else {
       this.showCalender();
-      console.log("prefab else:", prefab);
     }
   },
   methods: {
@@ -257,6 +257,7 @@ export default {
       } else {
         this.currentMonth--
       }
+      this.selected = null
       this.showCalender('pre')
     },
     nextMon () {
@@ -271,6 +272,7 @@ export default {
         this.currentMonth++
       }
       this.showCalender('next')
+      this.selected = null;
     },
     today () {
       this.statu = 'days'

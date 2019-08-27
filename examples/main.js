@@ -165,6 +165,11 @@ router.map({
             require(['./routers/calendar.vue'], resolve);
         }
     },
+    '/loading': {
+        component: function (resolve) {
+            require(['./routers/loading.vue'], resolve);
+        }
+    },
     '*': {
 		    component: function (resolve) {
 				    require(['./routers/notice.vue'], resolve);
