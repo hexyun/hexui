@@ -506,6 +506,9 @@
             internalValue (val) {
                 let time = new Date(val);
                 this.prefabtime = time.getTime();
+            },
+            visualValue (val) {
+                this.$emit("get-time", val);
             }
         },
         beforeDestroy () {
