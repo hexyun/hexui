@@ -6,10 +6,9 @@
         <span class="month" @click="statu = 'months'" v-show="statu!=='years'">{{currentMonth + 1}}月</span>
       </div>
       <div class="button">
-        <div>
+        <div @click="preMon">
           <svg
             t="1566202119123"
-            @click="preMon"
             class="icon"
             viewBox="0 0 1024 1024"
             version="1.1"
@@ -25,10 +24,9 @@
           </svg>
         </div>
         <span class="today" @click="today">今天</span>
-        <div>
+        <div @click="nextMon">
           <svg
             t="1566202156077"
-            @click="nextMon"
             class="icon"
             viewBox="0 0 1024 1024"
             version="1.1"
@@ -45,6 +43,8 @@
         </div>
       </div>
     </div>
+
+
     <ul class="week" v-show="statu==='days'">
       <li v-for="item in weeks">{{item}}</li>
     </ul>
@@ -53,13 +53,14 @@
         v-for="(index,item) in list"
         :class="{'active': (item.y === currentYear && item.m === (currentM+1) && item.d === currentDay) || index === selected || (item.y===year && item.m === month && item.d === day)}"
         @click="selectedDay(item, index)"
+        :style="{ 'border-color': color || '#E9E9E9'}"
       >
         <div class="day" :class="{'text-color': item.cur}">{{item.d}}</div>
         <div class="content">
           <div
             class="things"
-            v-for="thing in item.things"
-            @click.stop="selectedThing(thing)"
+            v-for="thing in item.showThings"
+            @click.stop="selectedThing(thing, item)"
           >
             <span class="thing">{{thing.name}}</span>
             <span class="thing-time">{{getTime(thing.time)}}</span>
@@ -73,6 +74,7 @@
         v-for="(index, mon) in months"
         :key="index"
         @click="selectedMonths(index)"
+        :style="{ 'border-color': color || '#E9E9E9'}"
       >{{mon}}</li>
     </ul>
     <ul class="years" v-show="statu==='years'">
@@ -80,6 +82,7 @@
         :class="{'active': year === currentYear}"
         v-for="year in years"
         @click="selectedYears(year)"
+        :style="{ 'border-color': color || '#E9E9E9'}"
       >{{year}}</li>
     </ul>
   </div>
@@ -89,7 +92,7 @@
 import Vue from 'vue';
 export default {
   name: 'calendar',
-  props: ['things', 'prefab'],
+  props: ['things', 'prefab', 'color'],
   data () {
     return {
       year: new Date().getFullYear(), // 今日年份
@@ -116,6 +119,7 @@ export default {
         '十一月',
         '十二月'
       ],
+      itemHeight: 16,
       weeks: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
       selected: null
     }
@@ -234,11 +238,13 @@ export default {
             list[i].y === date.getFullYear()
           ) {
             list[i].things = things[index].list
+            list[i].showThings = this.showThings(things[index].list);
           }
         }
       }
     },
     getTime (date) {
+      if (!date) return '';
       let time = new Date(date)
       let hours = time.getHours()
       let minutes = time.getMinutes()
@@ -293,27 +299,49 @@ export default {
       this.selected = index
       this.$emit('selected-day', day)
     },
-    selectedThing (thing) {
-      this.$emit('selected-thing', thing)
+    selectedThing (thing, item) {
+      this.$emit('selected-thing', thing, item)
+    },
+    // 事宜显示，显示不下时隐藏
+    /**
+     * 每个li都高度是总高度的0.2
+     */
+    showThings (things) {
+      let celendar = document.getElementsByClassName("celendar");
+      celendar = celendar[0];
+      let height = Math.floor(celendar.offsetHeight * 0.2 * 0.72);
+      let canShowCount = Math.floor(height / this.itemHeight);
+      if (things.length > canShowCount) {
+        let showThings = things.slice(0, canShowCount - 1);
+        showThings.push({name: '显示更多', time: null});
+        return showThings;
+      } else {
+        return things;
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-#celendar {
-  min-width: 700px;
+.celendar {
+  height: 100%;
 }
 .week li{
   height: 25px;
   color: black;
   font-weight: 600;
   border-width: 0;
+  position: relative;
+  left: 4px;
 }
 .content {
-  width: 96%;
   height: 72%;
   overflow: hidden;
+}
+.content .things {
+  height: 16px;
+  margin-left: 4px;
 }
 .content .thing {
   white-space: nowrap;
@@ -336,14 +364,17 @@ ul{
   justify-content: space-around;
   flex-wrap: wrap;
   align-items: center;
-  border-top: 1rpx solid #E9E9E9;
-  border-left: 1rpx solid #E9E9E9;
+}
+ul[class="date"] {
+  height: 80%;
+}
+.date li {
+  height: 25%;
 }
 li{
-  width: 14%;
+  width: 14.285%;
   height: 100px;
-  border-bottom: 1px solid #E9E9E9;
-  border-right: 1px solid #E9E9E9;
+  border: 1px solid #E9E9E9;
   color: #999;
   font-size: 12px;
   overflow: hidden;
@@ -360,6 +391,8 @@ li{
 .active{
   background-color: #E9E9E9;
   color: black;
+}
+.active .day {
   font-weight: 600;
 }
 /* 年份显示 */
@@ -367,7 +400,7 @@ ul[class="years"] {
   margin-top: 40px;
 }
 ul[class="years"] li {
-  width: 33%;
+  width: 33.33%;
   text-align: center;
   line-height: 100px;
   font-size: 16px;
@@ -377,7 +410,7 @@ ul[class="months"] {
   margin-top: 40px;
 }
 ul[class="months"] li {
-  width: 24.5%;
+  width: 25%;
   text-align: center;
   line-height: 100px;
   font-size: 14px;
@@ -386,25 +419,29 @@ ul[class="months"] li {
 .time {
   display: inline-block;
   font-size: 23px;
-  margin-left: 15px;
+  margin-left: 3px;
 }
 .button {
   display: inline-block;
   float: right;
+  top: 6.5px;
   position: relative;
   bottom: -8px;
-  margin-right: 15px;
 }
 .button > div {
   display: inline-block;
   border: 1px solid #E9E9E9;
   padding: 0 8px;
+  cursor: pointer;
 }
 .today {
   border: 1px solid #E9E9E9;
-  padding: 2px 8px;
+  padding: 0 8px;
   font-size: 13px;
-  cursor: pointer;
+  height: 20px;
+  display: inline-block;
+  top: 1px;
   position: relative;
+  cursor: pointer;
 }
 </style>
