@@ -31,9 +31,7 @@
     import clickoutside from '../../directives/clickoutside';
     import { oneOf } from '../../utils/assist';
     import { formatDate, parseDate } from './util';
-
     const prefixCls = 'ivu-date-picker';
-
     const DEFAULT_FORMATS = {
         date: 'yyyy-MM-dd',
         month: 'yyyy-MM',
@@ -44,9 +42,7 @@
         daterange: 'yyyy-MM-dd',
         datetimerange: 'yyyy-MM-dd HH:mm:ss'
     };
-
     const RANGE_SEPARATOR = ' - ';
-
     const DATE_FORMATTER = function(value, format) {
         return formatDate(value, format);
     };
@@ -57,7 +53,6 @@
         if (Array.isArray(value) && value.length === 2) {
             const start = value[0];
             const end = value[1];
-
             if (start && end) {
                 return formatDate(start, format) + RANGE_SEPARATOR + formatDate(end, format);
             }
@@ -69,7 +64,6 @@
         if (array.length === 2) {
             const range1 = array[0];
             const range2 = array[1];
-
             return [parseDate(range1, format), parseDate(range2, format)];
         }
         return [];
@@ -124,7 +118,6 @@
             },
             parser(text) {
                 let result = Number(text);
-
                 if (!isNaN(text)) {
                     return result;
                 } else {
@@ -133,7 +126,6 @@
             }
         }
     };
-
     export default {
         components: { iInput, Drop },
         directives: { clickoutside },
@@ -190,13 +182,11 @@
                 prefixCls: prefixCls,
                 showClose: false,
                 visible: false,
-                picker: null,
-                internalValue: '',
                 index: 0,
+                picker: null,
+                internalValue: '2019-07-05 03:03',
                 disableClickOutSide: false    // fixed when click a date,trigger clickoutside to close picker
             };
-        },
-        created () {
         },
         computed: {
             opened () {
@@ -221,7 +211,6 @@
                 } else if (this.type === 'year') {
                     return 'year';
                 }
-
                 return 'day';
             },
             visualValue: {
@@ -241,9 +230,10 @@
                     ).formatter;
                     const format = DEFAULT_FORMATS[this.type];
                     return formatter(value, this.format || format);
+                    return value;
                 },
-
                 set (value) {
+                    
                     if (value) {
                         const type = this.type;
                         const parser = (
@@ -258,7 +248,7 @@
                     }
                     if (this.picker) this.picker.value = value;
                 }
-            }              
+            }
         },
         methods: {
             handleClose () {
@@ -273,25 +263,20 @@
             handleInputChange (event) {
                 const oldValue = this.visualValue;
                 const value = event.target.value;
-
                 let correctValue = '';
                 let correctDate = '';
                 const type = this.type;
                 const format = this.format || DEFAULT_FORMATS[type];
-
                 if (type === 'daterange' || type === 'timerange' || type === 'datetimerange') {
                     const parser = (
                         TYPE_VALUE_RESOLVER_MAP[type] ||
                         TYPE_VALUE_RESOLVER_MAP['default']
                     ).parser;
-
                     const formatter = (
                         TYPE_VALUE_RESOLVER_MAP[type] ||
                         TYPE_VALUE_RESOLVER_MAP['default']
                     ).formatter;
-
                     const parsedValue = parser(value, format);
-
                     if (parsedValue[0] instanceof Date && parsedValue[1] instanceof Date) {
                         if (parsedValue[0].getTime() > parsedValue[1].getTime()) {
                             correctValue = oldValue;
@@ -302,17 +287,14 @@
                     } else {
                         correctValue = oldValue;
                     }
-
                     correctDate = parser(correctValue, format);
                 } else if (type === 'time') {
                     const parsedDate = parseDate(value, format);
-
                     if (parsedDate instanceof Date) {
                         if (this.disabledHours.length || this.disabledMinutes.length || this.disabledSeconds.length) {
                             const hours = parsedDate.getHours();
                             const minutes = parsedDate.getMinutes();
                             const seconds = parsedDate.getSeconds();
-
                             if ((this.disabledHours.length && this.disabledHours.indexOf(hours) > -1) ||
                                 (this.disabledMinutes.length && this.disabledMinutes.indexOf(minutes) > -1) ||
                                 (this.disabledSeconds.length && this.disabledSeconds.indexOf(seconds) > -1)) {
@@ -326,11 +308,9 @@
                     } else {
                         correctValue = oldValue;
                     }
-
                     correctDate = parseDate(correctValue, format);
                 } else {
                     const parsedDate = parseDate(value, format);
-
                     if (parsedDate instanceof Date) {
                         const options = this.options || false;
                         if (options && options.disabledDate && typeof options.disabledDate === 'function' && options.disabledDate(new Date(parsedDate))) {
@@ -341,14 +321,11 @@
                     } else {
                         correctValue = oldValue;
                     }
-
                     correctDate = parseDate(correctValue, format);
                 }
-
                 this.visualValue = correctValue;
                 event.target.value = correctValue;
                 this.internalValue = correctDate;
-
                 if (correctValue !== oldValue) this.emitChange(correctDate);
             },
             handleInputMouseenter () {
@@ -377,7 +354,6 @@
             showPicker () {
                 if (!this.picker) {
                     const type = this.type;
-
                     this.picker = new Vue(this.panel).$mount(this.$els.picker);
                     if (type === 'datetime' || type === 'datetimerange') {
                         this.confirm = true;
@@ -387,18 +363,15 @@
                     this.picker.confirm = this.confirm;
                     this.picker.selectionMode = this.selectionMode;
                     if (this.format) this.picker.format = this.format;
-
                     // TimePicker
                     if (this.disabledHours) this.picker.disabledHours = this.disabledHours;
                     if (this.disabledMinutes) this.picker.disabledMinutes = this.disabledMinutes;
                     if (this.disabledSeconds) this.picker.disabledSeconds = this.disabledSeconds;
                     if (this.hideDisabledOptions) this.picker.hideDisabledOptions = this.hideDisabledOptions;
-
                     const options = this.options;
                     for (const option in options) {
                         this.picker[option] = options[option];
                     }
-
                     this.picker.$on('on-pick', (date, visible = false) => {
                         if (!this.confirm) this.visible = visible;
                         this.value = date;
@@ -406,7 +379,6 @@
                         this.picker.resetView && this.picker.resetView();
                         this.emitChange(date);
                     });
-
                     this.picker.$on('on-pick-clear', () => {
                         this.handleClear();
                     });
@@ -430,7 +402,6 @@
                     TYPE_VALUE_RESOLVER_MAP[type] ||
                     TYPE_VALUE_RESOLVER_MAP['default']
                 ).formatter;
-
                 let newDate = formatter(date, format);
                 if (type === 'daterange' || type === 'timerange') {
                     newDate = [newDate.split(RANGE_SEPARATOR)[0], newDate.split(RANGE_SEPARATOR)[1]];
@@ -469,6 +440,13 @@
                     this.picker.handleClear();
                 }
             },
+            prefabtime (val) {
+                if(val) {
+                    this.internalValue = this.formatTime(parseInt(val));
+                } else {
+                    this.internalValue = '';
+                }
+            },
             value: {
                 immediate: true,
                 handler (val) {
@@ -477,14 +455,12 @@
                         TYPE_VALUE_RESOLVER_MAP[type] ||
                         TYPE_VALUE_RESOLVER_MAP['default']
                     ).parser;
-
                     if (val && type === 'time' && !(val instanceof Date)) {
                         val = parser(val, this.format || DEFAULT_FORMATS[type]);
                     } else if (val && type === 'timerange' && Array.isArray(val) && val.length === 2 && !(val[0] instanceof Date) && !(val[1] instanceof Date)) {
                         val = val.join(RANGE_SEPARATOR);
                         val = parser(val, this.format || DEFAULT_FORMATS[type]);
                     }
-
                     this.internalValue = val;
                 }
             },
@@ -496,20 +472,12 @@
                     this.$emit('on-open-change', false);
                 }
             },
-            prefabtime (val) {
-                if(val) {
-                    this.internalValue = this.formatTime(parseInt(val));
-                } else {
-                    this.internalValue = '';
-                }
-            },
-            internalValue (val) {
-                let time = new Date(val);
-                this.prefabtime = time.getTime();
-            },
             visualValue (val) {
-                this.$emit("get-time", val);
+                if (typeof val !== 'object'){
+                    this.$emit("get-time", val);
+                }
             }
+
         },
         beforeDestroy () {
             if (this.picker) {
