@@ -272,7 +272,7 @@
                 this.resetDate();
             },
             handleTimePick (value) {
-                // this.handleDatePick(date);
+                // this.handleDatePick(value);
                 this.date.setHours(value.getHours());
                 this.date.setMinutes(value.getMinutes());
                 this.date.setSeconds(value.getSeconds());
