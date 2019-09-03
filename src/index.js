@@ -44,7 +44,9 @@ import { Row, Col } from './components/layout';
 import { Select, Option, OptionGroup } from './components/select';
 import locale from './locale';
 import calendar from './components/calendar/calendar';
-import loading from './components/loading/loading'
+import loading from './components/loading/loading';
+import DateRange from './components/daterange'
+
 
 const hex = {
     Affix,
@@ -110,7 +112,8 @@ const hex = {
     Transfer,
     Tree,
     Upload,
-    Step
+    Step,
+    DateRange
 };
 
 const install = function (Vue, opts = {}) {

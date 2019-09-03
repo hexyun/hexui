@@ -170,6 +170,11 @@ router.map({
             require(['./routers/loading.vue'], resolve);
         }
     },
+    '/daterange': {
+        component: function (resolve) {
+            require(['./routers/daterange.vue'], resolve);
+        }
+    },
     '*': {
 		    component: function (resolve) {
 				    require(['./routers/notice.vue'], resolve);

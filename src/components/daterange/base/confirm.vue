@@ -19,7 +19,7 @@
         mixins: [ Locale ],
         components: { iButton },
         props: {
-            showTime: false,
+            showTime: true,
             isTime: false,
             timeDisabled: false
         },
@@ -48,7 +48,6 @@
             },
             handleNow () {
                 this.$emit('set-date-now');
-                this.$emit('on-pick-success');
             }
         }
     };
