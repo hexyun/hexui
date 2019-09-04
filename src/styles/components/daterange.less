@@ -1,0 +1,296 @@
+@time-picker-prefix-cls: ~"@{css-prefix}time-picker";
+@time-picker-cells-width-base: 56px;
+@time-picker-cells-width-with-date-base: 72px;
+@time-picker-cells-width: @time-picker-cells-width-base * 2;
+@time-picker-cells-width-with-seconds: @time-picker-cells-width-base *3;
+@time-picker-cells-width-with-date: @time-picker-cells-width-with-date-base * 2;
+@time-picker-cells-width-with-date-with-seconds: @time-picker-cells-width-with-date-base * 3;
+
+.@{time-picker-prefix-cls} {
+    &-cells{
+        min-width: @time-picker-cells-width;
+        &-with-seconds{
+            min-width: @time-picker-cells-width-with-seconds;
+        }
+        &-list{
+            width: @time-picker-cells-width-base;
+            max-height: 144px;
+            float: left;
+            overflow: hidden;
+            border-left: 1px solid @border-color-split;
+            position: relative;
+            &:hover{
+                overflow-y: auto;
+            }
+
+            &:first-child{
+                border-left: none;
+                border-radius: @btn-border-radius 0 0 @btn-border-radius;
+            }
+            &:last-child{
+                border-radius: 0 @btn-border-radius @btn-border-radius 0;
+            }
+            ul{
+                width: 100%;
+                margin: 0;
+                padding: 0 0 120px 0;
+                list-style: none;
+                li{
+                    width: 100%;
+                    height: 24px;
+                    line-height: 24px;
+                    margin: 0;
+                    padding: 0 0 0 16px;
+                    box-sizing: content-box;
+                    text-align: left;
+                    user-select: none;
+                    cursor: pointer;
+                    list-style: none;
+                    transition: background @transition-time @ease-in-out;
+
+                }
+            }
+        }
+        &-cell{
+            &:hover{
+                background: @background-color-select-hover;
+            }
+            &-disabled {
+                color: @btn-disable-color;
+                cursor: @cursor-disabled;
+
+                &:hover {
+                    color: @btn-disable-color;
+                    background-color: #fff;
+                    cursor: @cursor-disabled;
+                }
+            }
+            &-selected ,&-selected:hover{
+                color: @primary-color;
+                background: @background-color-select-hover;
+            }
+        }
+    }
+
+    &-header{
+        height: 32px;
+        line-height: 32px;
+        text-align: center;
+        border-bottom: 1px solid @border-color-split;
+    }
+
+    &-with-range{
+        .@{picker-prefix-cls}-panel{
+            &-body{
+                min-width: @time-picker-cells-width * 2 + 4px;
+            }
+            &-content{
+                float: left;
+                position: relative;
+
+                &:after{
+                    content: '';
+                    display: block;
+                    width: 2px;
+                    position: absolute;
+                    top: 31px;
+                    bottom: 0;
+                    right: -2px;
+                    background: @border-color-split;
+                    z-index: 1;
+                }
+
+                &-right{
+                    float: right;
+                    &:after{
+                        right: auto;
+                        left: -2px;
+                    }
+                }
+            }
+        }
+        .@{time-picker-prefix-cls}-cells{
+            &-list{
+                &:first-child{
+                    border-radius: 0;
+                }
+                &:last-child{
+                    border-radius: 0;
+                }
+            }
+        }
+    }
+    &-with-range&-with-seconds{
+        .@{picker-prefix-cls}-panel{
+            &-body{
+                min-width: @time-picker-cells-width-with-seconds * 2 + 4px;
+            }
+        }
+    }
+}
+
+.@{picker-prefix-cls}-panel-content{
+    .@{picker-prefix-cls}-panel-content{
+        .@{time-picker-prefix-cls}{
+            &-cells{
+                // 天
+                min-width: @time-picker-cells-width-with-date-with-seconds;
+                &-with-seconds{
+                    min-width: @time-picker-cells-width-with-date-with-seconds;
+                    .@{time-picker-prefix-cls}-cells-list{
+                        width: @time-picker-cells-width-with-date-with-seconds / 3;
+                        ul{
+                            li{
+                                padding: 0 0 0 28px;
+                            }
+                        }
+                    }
+                }
+                &-list {
+                    width: @time-picker-cells-width-with-date-with-seconds / 2;
+                    max-height: 216px;
+                    &:first-child{
+                        border-radius: 0;
+                    }
+                    &:last-child{
+                        border-radius: 0;
+                    }
+                    ul{
+                        padding: 0 0 192px 0;
+                        li{
+                            padding: 0 0 0 46px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .@{picker-prefix-cls}-panel-body{
+        left: 210px;
+        position: absolute;
+        top: 0;
+        background-color: white;
+    }
+}
+.range-ant {
+    .ivu-picker-confirm{
+        width: 427px;
+    }
+    .ivu-date-picker-rel:hover {
+        border: 1px solid #ED6A00;
+    }
+    .ivu-date-picker-header {
+        // 年月
+        font-size: 14px;
+        font-weight: 500;
+        color: #262626;
+        width: 275px;
+    }
+    .ivu-date-picker-cells {
+        width: 255px;
+    }
+    .ivu-date-picker-cells-header span {
+        height: 30px;
+        padding: 6px 0;
+        color: #595959 !important;
+    }
+    .ivu-date-picker-cells span em {
+        // 中间的数字
+        width: 26px;
+        height: 25px;
+        position: relative;
+        left: 2px;
+        font-size: 14px;
+        border-radius: 2px;
+    }
+    .ivu-date-picker-cells-cell span em {
+        color: #595959;
+    }
+    .ivu-date-picker-cells-cell-prev-month em, .ivu-date-picker-cells-cell-next-month em {
+        color: #BFBFBF !important;
+    }
+    .ivu-date-picker-cells span {
+        width: 36px;
+        padding: 0 2px;
+        margin: 0;
+        height: 30px;
+        em {
+            line-height: 26px;
+        }
+    }
+    #time-right {
+        left: 286px;
+    }
+    .ivu-picker-confirm {
+        // 底部按钮
+        width: 100%;
+    }
+    .ivu-date-picker-cells-cell-selected em{
+        // 选中颜色
+        background: #ED6A00;
+        height: 26px !important;
+    }
+    .ivu-date-picker-cells-cell-range:before, .ivu-date-picker-cells-cell:hover em {
+        // 区间颜色, 鼠标悬停颜色
+        background: #FFF1E6;
+    }
+    .ivu-date-picker-cells-cell-selected:hover em{
+        background: #ED6A00;
+    }
+    .ivu-date-picker-cells-cell-today em:after {
+        // 今天
+        width: 0;
+        height: 0;
+    }
+    .ivu-date-picker-cells-cell-today em {
+        border: 1px solid #ED6A00;
+        color: #ED6A00;
+        border-radius: 2px;
+        font-weight: 700;
+        height: 27px !important;
+    }
+    .ivu-date-picker-header {
+        height: 40px;
+        line-height: 40px;
+        border-color: #e8e8e8;
+    }
+    .ivu-input:focus, .ivu-input:hover{
+        border-color: #ED6A00;
+        box-shadow: 0 0 0 2px rgba(250, 173, 20, 0);
+    }
+    .ivu-date-picker-header-label {
+        color: #262626;
+    }
+    .ivu-date-picker-cells-month span {
+        // 月份
+        width: 63px;
+        height: 69px;
+        em {
+            height: 24px;
+            width: 46px;
+            padding: 0 8px;
+        }
+    }
+    .ivu-date-picker-cells-cell:hover em {
+        color: #ED6A00;
+        background: #FFF1E6;
+        height: 27px;
+    }
+    .ivu-date-picker-cells-year span {
+        // 月份
+        width: 63px;
+        height: 69px;
+        em {
+            height: 24px;
+            width: 46px;
+            padding: 0 8px;
+        }
+    }
+    .ivu-date-picker-cells-cell {
+        color: #595959;
+    }
+    .ivu-date-picker-cells-cell-selected:hover em{
+        background: #ED6A00 !important;
+        color: white !important;
+    }
+}
