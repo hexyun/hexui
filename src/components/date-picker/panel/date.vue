@@ -231,7 +231,10 @@
                 }
             },
             setTimeNow () {
-                this.$emit('on-pick', new Date());
+                this.$emit('on-pick', new Date(), false, true);
+            },
+            handlePickSuccess () {
+                this.$emit('on-pick', this.date, false, true);
             },
             handleYearPick(year, close = true) {
                 this.year = year;

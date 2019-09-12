@@ -379,7 +379,7 @@
                 this[`${direction}CurrentView`] = 'month';
             },
             handleConfirm(visible) {
-                this.$emit('on-pick', [this.minDate, this.maxDate], visible);
+                this.$emit('on-pick', [this.minDate, this.maxDate], visible, true);
             },
             handleRangePick (val, close = true) {
                 if (this.maxDate === val.maxDate && this.minDate === val.minDate) return;

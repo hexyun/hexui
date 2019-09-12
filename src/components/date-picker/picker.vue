@@ -138,6 +138,9 @@
                 type: Boolean,
                 default: false
             },
+            // internalValue : {
+            //     type: Number
+            // },
             disabled: {
                 type: Boolean,
                 default: false
@@ -184,7 +187,7 @@
                 visible: false,
                 index: 0,
                 picker: null,
-                internalValue: '2019-07-05 03:03',
+                internalValue: '',
                 disableClickOutSide: false    // fixed when click a date,trigger clickoutside to close picker
             };
         },
@@ -233,7 +236,6 @@
                     return value;
                 },
                 set (value) {
-                    
                     if (value) {
                         const type = this.type;
                         const parser = (
@@ -326,7 +328,9 @@
                 this.visualValue = correctValue;
                 event.target.value = correctValue;
                 this.internalValue = correctDate;
-                if (correctValue !== oldValue) this.emitChange(correctDate);
+                if (correctValue !== oldValue) {
+                    this.emitChange(correctDate);
+                }
             },
             handleInputMouseenter () {
                 if (this.readonly || this.disabled) return;
@@ -339,6 +343,9 @@
             },
             handleIconClick () {
                 if (this.showClose) {
+                    if (!this.visible) {
+                        this.emitChange('');
+                    }
                     this.handleClear();
                 } else {
                     this.handleFocus();
@@ -347,6 +354,7 @@
             handleClear () {
                 this.visible = false;
                 this.internalValue = '';
+                this.prefabtime = '';
                 this.value = '';
                 this.$emit('on-clear');
                 this.$dispatch('on-form-change', '');
@@ -372,12 +380,14 @@
                     for (const option in options) {
                         this.picker[option] = options[option];
                     }
-                    this.picker.$on('on-pick', (date, visible = false) => {
+                    this.picker.$on('on-pick', (date, visible = false, isEmit = false) => {
                         if (!this.confirm) this.visible = visible;
                         this.value = date;
                         this.picker.value = date;
                         this.picker.resetView && this.picker.resetView();
-                        this.emitChange(date);
+                        if (isEmit) {
+                            this.visible = false;
+                        }
                     });
                     this.picker.$on('on-pick-clear', () => {
                         this.handleClear();
@@ -432,7 +442,10 @@
                 } else {
                     if (this.picker) this.picker.resetView && this.picker.resetView(true);
                     this.$refs.drop.destroy();
-                    if (this.open === null) this.$emit('on-open-change', false);
+                    if (this.open === null) {
+                        this.$emit('on-open-change', false);
+                        this.emitChange(this.visualValue)
+                    }
                 }
             },
             internalValue(val) {
@@ -472,11 +485,6 @@
                     this.$emit('on-open-change', false);
                 }
             },
-            visualValue (val) {
-                if (typeof val !== 'object'){
-                    this.$emit("get-time", val);
-                }
-            }
 
         },
         beforeDestroy () {
@@ -486,6 +494,9 @@
         },
         ready () {
             if (this.open !== null) this.visible = this.open;
+        },
+        created () {
+            this.internalValue = this.formatTime(parseInt(this.internalValue));
         },
         events: {
             'on-form-blur' () {

@@ -48,7 +48,6 @@
             },
             handleNow () {
                 this.$emit('set-date-now');
-                this.$emit('on-pick-success');
             }
         }
     };
