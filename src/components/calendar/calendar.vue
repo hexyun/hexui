@@ -60,7 +60,7 @@
           <div
             class="things"
             v-for="thing in item.showThings"
-            @click.stop="selectedThing(thing, item)"
+            @click="selectedThing(thing, item)"
           >
             <span class="thing">{{thing.name}}</span>
             <span class="thing-time">{{getTime(thing.time)}}</span>
@@ -92,7 +92,7 @@
 import Vue from 'vue';
 export default {
   name: 'calendar',
-  props: ['things', 'prefab', 'color'],
+  props: ['things', 'prefab', 'color', 'max'],
   data () {
     return {
       year: new Date().getFullYear(), // 今日年份
@@ -119,7 +119,6 @@ export default {
         '十一月',
         '十二月'
       ],
-      itemHeight: 16,
       weeks: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
       selected: null
     }
@@ -223,7 +222,7 @@ export default {
           })
         }
       }
-      this.addThings()
+    this.addThings()
     },
     addThings () {
       let { list, things } = this
@@ -307,17 +306,22 @@ export default {
      * 每个li都高度是总高度的0.2
      */
     showThings (things) {
-      let celendar = document.getElementsByClassName("celendar");
-      celendar = celendar[0];
-      let height = Math.floor(celendar.offsetHeight * 0.2 * 0.72);
-      let canShowCount = Math.floor(height / this.itemHeight);
-      if (things.length > canShowCount) {
-        let showThings = things.slice(0, canShowCount - 1);
+      if(!this.max) return things;
+      if (things.length > this.max) {
+        let showThings = things.slice(0, this.max - 1);
         showThings.push({name: '显示更多', time: null});
         return showThings;
       } else {
         return things;
       }
+    }
+  },
+  created () {
+  },
+  watch: {
+    things() {
+      this.addThings()
+      this.showCalender('thing');
     }
   }
 }
@@ -336,7 +340,7 @@ export default {
   left: 4px;
 }
 .content {
-  height: 72%;
+  height: 86%;
   overflow: hidden;
 }
 .content .things {
