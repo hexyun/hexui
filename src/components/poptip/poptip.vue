@@ -123,6 +123,7 @@
                     return false;
                 }
                 this.visible = !this.visible;
+                return false;
             },
             handleClose () {
                 if (this.confirm) {
