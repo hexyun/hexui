@@ -125,9 +125,12 @@
         watch: {
             openKeys () {
                 this.$emit('on-open-change', this.openKeys);
+                this.updateActiveKey();
+                this.updateOpened();
             },
             activeKey () {
                 this.updateActiveKey();
+                this.updateOpened();
             }
         }
     };
