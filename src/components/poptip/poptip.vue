@@ -114,16 +114,17 @@
             }
         },
         methods: {
-            handleClick () {
+            handleClick (e) {
                 if (this.confirm) {
                     this.visible = !this.visible;
+                    e.preventDefault()
+                    e.stopPropagation()
                     return true;
                 }
                 if (this.trigger !== 'click') {
                     return false;
                 }
-                this.visible = !this.visible;
-                return false;
+                return false
             },
             handleClose () {
                 if (this.confirm) {
