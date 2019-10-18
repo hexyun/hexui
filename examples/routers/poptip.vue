@@ -35,7 +35,14 @@
     export default {
         methods: {
             T() {
-                location.href = 'https://www.baidu.com'
+                // location.href = 'https://www.baidu.com'
+                console.log(222)
+            },
+            ok(e) {
+                console.log('ok')
+            },
+            cancel(e) {
+                console.log('cancel')
             }
         }
     }

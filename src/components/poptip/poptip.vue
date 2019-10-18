@@ -21,8 +21,8 @@
                         <div :class="[prefixCls + '-body-message']"><slot name="title">{{ title }}</slot></div>
                     </div>
                     <div :class="[prefixCls + '-footer']">
-                        <i-button type="text" size="small" @click="cancel">{{ cancelText }}</i-button>
-                        <i-button type="primary" size="small" @click="ok">{{ okText }}</i-button>
+                        <i-button type="text" size="small" @click.stop.prevent="cancel">{{ cancelText }}</i-button>
+                        <i-button type="primary" size="small" @click.stop.prevent="ok">{{ okText }}</i-button>
                     </div>
                 </div>
                 <div :class="[prefixCls + '-inner']" v-if="!confirm">
@@ -141,6 +141,7 @@
                     return false;
                 }
                 this.visible = true;
+                return false;
             },
             handleBlur (fromInput = true) {
                 if (this.trigger !== 'focus' || this.confirm || (this.isInput && !fromInput)) {
@@ -163,10 +164,12 @@
             cancel () {
                 this.visible = false;
                 this.$emit('on-cancel');
+                return false
             },
             ok () {
                 this.visible = false;
                 this.$emit('on-ok');
+                return false
             },
             getInputChildren () {
                 const $input = this.$els.reference.querySelectorAll('input');
