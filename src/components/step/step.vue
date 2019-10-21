@@ -1,14 +1,15 @@
 <template>
-  <div class="mask" v-show="isStepShow">
-    <Icon type="ios-close-outline" class='close' @click="close"></Icon>
+  <div class="mask" v-show="isStepShow" :style="{'background':backGround}">
+    <div class="close" @click="close"></div>
     <div class="maskTop">
       <div
         class="step"
         v-for="(index,item) in list"
         :key="index"
-        :style="position[index]"
-        v-show="actNum==index"
-        :class='{"act":actNum==index}'
+        :style="position"
+        v-show="actNum === index"
+        :class="{'act':actNum == index,'left':item.position === 'left','top': item.position === 'top','bottom': item.position === 'bottom'}"
+        v-el:steps
       >
         <div class="stepNum">{{item.title}}</div>
         <div class="stepText">{{item.text}}</div>
@@ -24,91 +25,46 @@
   </div>
 </template>
 <script>
-import { setTimeout } from 'timers';
+import Vue from "vue";
 export default {
-  data() {
-    return {
-      // 激活的提示栏
-      actNum: 0,
-      // 按钮文字
-      btnText: "",
-      // 下一步的文字
-      nextText: "下一步",
-      // 完成的文字
-      finalText: "完成",
-      // 左侧图标
-      leftIcon: "chevron-left",
-      // 右侧图标
-      rightIcon: "chevron-right",
-      // 按钮样式
-      buttonStyle: "primary",
-      // 存定位的数组
-      position: [],
-      // 能否小于0
-      isless: true,
-      // 存储需要移动的scroll的值
-      scrollT:[]
-    };
-  },
-  // 是否开启,数据列表
-  props: ["isStepShow", "list"],
-  methods: {
-    stepShow() {
-      // 初始化默认值
-      this.isStepShow = true;
-      this.actNum = 0;
-      this.btnText = this.nextText;
-      // 重置除了第一个以外的所有样式
-      for (let i = 1; i < this.list.length; i++) {
-        document.querySelector("#" + this.list[i].el).style.zIndex = 0;
-        document.querySelector("#" + this.list[i].el).style.position = "auto";
-      }
-      // 第一个元素设置样式
-      var actel = document.querySelector("#" + this.list[0].el);
-      actel.style.zIndex = 999;
-      actel.style.position = "relative";
-      // 重置第一个元素的滚动条位置
-      document.documentElement.scrollTo(0,this.scrollT[0])
+  props: {
+    nextText: {
+      default: "下一步"
     },
-    next() {
-      // 重置所有样式
-      for (let i = 0; i < this.list.length; i++) {
-        document.querySelector("#" + this.list[i].el).style.zIndex = 0;
-        document.querySelector("#" + this.list[i].el).style.position = "auto";
-      }
-      // 判断点的是哪个
-      switch (this.actNum) {
-        // 如果是倒数第二个，下一个的文字变成终结的文字
-        case this.list.length - 2:
-          this.btnText = this.finalText;
-          this.actNum++;
-          break;
-        // 如果是最后一个，隐藏掉
-        case this.list.length - 1:
-          this.isStepShow = false;
-          break;
-        default:
-          // 其他的数值+1
-          this.actNum++;
-          break;
-      }
-      // 给选定的元素样式
-      var actel = document.querySelector("#" + this.list[this.actNum].el);
-      actel.style.zIndex = 999;
-      actel.style.position = "relative";
-      // 滚动到相应的位置
-      document.documentElement.scrollTo(0,this.scrollT[this.actNum])
+    finalText: {
+      default: "完成"
     },
-    close:function(){
-       this.isStepShow = false;
+    leftIcon: {
+      default: "chevron-left"
+    },
+    rightIcon: {
+      default: "chevron-right"
+    },
+    buttonStyle: {
+      default: "primary"
+    },
+    isStepShow: {
+      default: true
+    },
+    list: {
+      default: []
+    },
+    isless: {
+      default: false
+    },
+    backGround: {
+      default: "rgba(5, 18, 43, 0.65)"
     }
   },
-  ready() {
-    var self = this;
-    var step=document.querySelectorAll(".step");
-    var mask=document.querySelector(".mask");
-    this.$nextTick(function() {
-      // 获取元素距离文档左边和上边的距离
+  data() {
+    return {
+      actNum: 0,
+      position: { left: 0, top: 0 }
+    };
+  },
+  methods: {
+    show(i) {
+      var self = this;
       function getElementLeft(element) {
         var actualLeft = element.offsetLeft;
         var current = element.offsetParent;
@@ -126,141 +82,132 @@ export default {
           current = current.offsetParent;
         }
         return actualTop;
-      } 
-      // 能否小于0
-      function isLess(i) {
-        if (self.isless) {
-          i = i < 0 ? (i = 0) : i;
-        }
-        return i;
       }
-      // 将按钮文字替换成自定义文字
-      self.btnText = self.nextText || "下一步";
-      // 获取第一个元素
-      var actel = document.querySelector("#" + self.list[0].el);
-      // 给mask设置高度，如果内容不满一屏幕按照一屏高度，如果超过了就按照文档高度
-      document.body.scrollHeight < window.innerHeight
-        ? (mask.style.height =
-            window.innerHeight + "px")
-        : (mask.style.height =
-            document.body.offsetHeight + "px");
-
-      // 第一个元素设置样式
-      actel.style.zIndex = 999;
-      actel.style.position = "relative";
-      // 创建一个空数组存储定位
-      var position = [];
-      // 创建一个空数组存储top值
-      var st=[];
-      // 遍历所有的元素
-      for (let i = 0; i < self.list.length; i++) {
-        // 获取元素
-        var actel = document.querySelector("#" + self.list[i].el);
-        // 将除了第一个提示以外的提示设置成visibility隐藏来获取宽高
-        if (i != 0) {
-          step[i].style.visibility = "hidden";
-          step[i].style.display = "block";
+      function isLess(i) {
+        return !self.isless && i < 0 ? 0 : i;
+      }
+      this.list.forEach((item, ind) => {
+        let el = document.querySelector("#" + item.el);
+        if (ind === i) {
+          el.style.zIndex = 999;
+          el.style.position = "absolute";
+        } else {
+          el.style.zIndex = 0;
+          el.style.position = "absolute";
         }
-        // 获取元素距离文档左边和上边的距离
-        let Oleft = getElementLeft(actel);
-        let Otop = getElementTop(actel);
-        // 获取提示框的宽度高度
-        let OWidth = step[i].offsetWidth;
-        let OHeight = step[i].offsetHeight;
-        // 获取元素的宽度和高度
-        let OelWidth = actel.offsetWidth;
-        let OelHeight = actel.offsetHeight;
-        // 获取偏移值
-        let Osize = self.list[i].size;
-        // 获取元素高度和提示框高度哪个大
-        let whichOne=OHeight>OelHeight?OHeight:OelHeight;
-        console.log(
-          i +
-            " 方向" +
-            self.list[i].position +
-            " 左" +
-            Oleft +
-            " 上" +
-            Otop +
-            " 宽" +
-            OWidth +
-            " 高" +
-            OHeight +
-            " 元素宽" +
-            OelWidth +
-            " 元素高" +
-            OelHeight +
-            " 偏移值" +
-            Osize+
-            "比较大的尺寸"+
-            whichOne
-        );
-        // 根据元素里的定位决定提示框的位置
-        let fLeft = 0;
-        let fTop = 0;
-        switch (self.list[i].position) {
-          case "left":
-            fLeft = isLess(Oleft - OWidth - Osize);
-            fTop = Otop ;
-            // 提示框在左边的情况下，滚动条的值=最终定位的高度+提示框和元素中比较高的高度的一半-屏幕高度的一半
-            fTop+whichOne/2>window.innerHeight/2?st.push(fTop+whichOne/2-window.innerHeight/2):st.push(0);
-            break;
+      });
+
+      let wHalf = window.innerHeight / 2;
+      let num = self.actNum;
+      let item = self.list[num];
+      let actel = document.querySelector("#" + item.el);
+      let tarL = getElementLeft(actel);
+      let tarT = getElementTop(actel);
+      let tarW = actel.offsetWidth;
+      let tarH = actel.offsetHeight;
+      let o = document.querySelectorAll(".step")[num];
+      let ow = o.offsetWidth;
+      let oh = o.offsetHeight;
+      let size = item.size;
+      let scrollT = 0;
+      function scrollChange() {
+        let scrollTop =
+          document.documentElement.scrollTop ||
+          window.pageYOffset ||
+          document.body.scrollTop;
+        let left = 0;
+        let top = 0;
+        switch (item.position) {
           case "top":
-            fLeft = Oleft ;
-            fTop = isLess(Otop - OHeight - Osize);
-            //提示框在上的情况下，判断最终定位的左上角+(元素的高度+提示框的高度)/2是否大于屏幕的高度/2
-            //滚动条的值等于元素的左上角加上元素高度/2-屏幕高度的一半
-            fTop+(OelHeight+OHeight)/2>window.innerHeight/2?st.push(fTop+(OelHeight+OHeight)/2-window.innerHeight/2):st.push(0);
+            left = isLess(tarL - ow / 2 + tarW / 2);
+            top = tarT - oh - size - scrollTop;
+            scrollT = tarT + tarH/2 - size/2 - oh/2 - wHalf;
             break;
           case "bottom":
-            fLeft = Oleft;
-            fTop = isLess(Otop + OelHeight + Osize);
-            // 提示框在下面的情况下，判断元素定位的高度加上（提示框的高度+元素的高度）/2
-            Otop+(OHeight+OelHeight)/2>window.innerHeight/2?st.push(Otop+(OHeight+OelHeight)/2-window.innerHeight/2):st.push(0);
+            left = isLess(tarL - ow / 2 + tarW / 2);
+            top = tarT + tarH + size - scrollTop;
+            scrollT = tarT + tarH/2 + size/2 +oh/2 - wHalf;
+            break;
+          case "left":
+            left = isLess(tarL - ow - size);
+            top = tarT - oh / 2 + tarH / 2 - scrollTop;
+            scrollT = tarT + tarH/2 - wHalf;
             break;
           default:
-            fLeft = isLess(Oleft + OelWidth + Osize);
-            fTop = Otop ;
-            // 提示框在左边的情况下，滚动条的值=最终定位的高度+提示框和元素中比较高的高度的一半-屏幕高度的一半
-            fTop+whichOne/2>window.innerHeight/2?st.push(fTop+whichOne/2-window.innerHeight/2):st.push(0);
+            left = isLess(tarL + tarW + size);
+            top = tarT - oh / 2 + tarH / 2 - scrollTop;
+            scrollT = tarT + tarH / 2 - wHalf;
             break;
         }
-        position.push({
-          left: fLeft+'px',
-          top: fTop+'px'
-        });
-        // 获取后改回原来的样式
-        if (i != 0) {
-          step[i].style.visibility = "";
-          step[i].style.display = "none";
-        }
+        self.position.left = left + "px";
+        self.position.top = top + "px";
       }
-      // window.scrollBy
-      // document.documentElement.scrollBy(0,100);
-      // 赋值
-      self.position = position;
-      self.scrollT=st;
-      console.log(self.scrollT)
+      scrollChange();
+      window.onscroll = function() {
+        scrollChange();
+      };
+      this.$nextTick(function() {
+        setTimeout(function(){
+          window.scrollTo(0, scrollT);
+        },200)
+      });
+    },
+    next() {
+      this.actNum++;
+    },
+    open() {
+      this.actNum = 0;
+      this.isStepShow = true;
+    },
+    close() {
+      this.isStepShow = false;
+    }
+  },
+  computed: {
+    btnText: function() {
+      return this.list.length > 1 && this.list.length - this.actNum > 1
+        ? this.nextText
+        : this.finalText;
+    }
+  },
+  watch: {
+    list: {
+      deep: true,
+      handler() {
+        this.actNum = 0;
+        this.show(0);
+      }
+    },
+    actNum(n, o) {
+      n < this.list.length ? this.show(n) : this.close();
+    }
+  },
+  ready() {
+    this.$nextTick(function() {
+      this.show(0);
     });
-    window.scrollTo(0,0)
   }
 };
 </script>
 <style lang='less' scope>
 .mask {
-  position: absolute;
+  position: fixed !important;
   z-index: 998;
-  left: 0;
-  right: 0;
-  top: 0;
-  width: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  left: 0 !important;
+  right: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
   color: #fff;
-  .close{
-    font-size: 40px;
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
+  width: auto !important;
+  height: auto !important;
+  .close {
+    width: 38px;
+    height: 38px;
+    position: fixed;
+    right: 70px;
+    top: 70px;
+    cursor: pointer;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACYAAAAmCAYAAACoPemuAAACUUlEQVRYR82YOYgTURjHf5sBRcHGAxG2EjxAMFFE1CaVR2lhWIu0IrJFEIKEQFIkEFIEJIWI2KbYRQtLjyqNiIgmguABVsKyeDSCojBB/pIH4zAzebPZkffKme/48f3f+S2wsbEX2A8sAruBHcDWaahfwHfgC/AJ+Aisp02zkMJhC3ACOAbsSeEn08/AK+AF8NvG1wYsB5wEisA2m6AJNj+BIfAcmCTFmgW2C7gE7JsTKOy+BtwHvsbFTQI7OIWShFkMSSq491HB48COAhcByZjlkJwPgNfhJFFgqtTl/wBlWAS3Eq5cGExz6iqQlXxx1Zesd4JzLggm2a5kMNFtp4IWxF2zWoNgp4ALtlEysnsIPFNsAybprm/CPjUvr/a5m9qEDdgZ4Ny8UTfJ/zHw1IAt2x4zxWJxZ7/fPzsYDF72er0PSTDVavVAuVw+XqlUngyHw2+W4Dq+bglMB/I1SydGo9FSPp8/7Pu+32w273U6nXdRvvV6/VCr1Sp5nueNx+O3hUJh1TYHcFtgp4Hztk6qQrfbXVLCOLgglGxqtdrqrOqG8j8SWAk4Ygsmu3DiYOWS/qXI8UZgklFyphpRAApg5Jsl9Yxk6wK7AWxPRTU1DsJNJhNfn3O5XKzEKXL8EFgD8FI4/WMquHa7XRKQfgiw0WjELgrLPL7TYM5K6ezkd3a7cHaDdfZI0gp28hAXmLPXHmcviqqak1frv8ecq48RwTn5fDPnq5MPXgPnZIsgWDl1erJ6lW+oqWLgnGxDGTgnG3fBC6dzrc6o23DmzeE/TZhqOKAkO28AAAAASUVORK5CYII=);
   }
   .maskTop {
     width: 100%;
@@ -269,19 +216,63 @@ export default {
   .step {
     display: inline-block;
     position: absolute;
+    font-size: 14px;
+    border: 1px dashed #fff;
+    padding: 8px 10px;
+    &::before {
+      content: "";
+      width: 10px;
+      height: 12px;
+      background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAMCAYAAABbayygAAAAcklEQVQoU93PsQ3CYAyE0e9qpCyQQVJCkzGYJCNAeiiZgQGyDAOwwaFEduT8I+DOviedLJqx/QI+kqYaqS6278AF6ICnpDnzHQY6AyNwApaKN1iRpG/c+opl+xZ1Y6Kss534scIr8G5Rg4fDM1H5/1//AGqBV4mk53atAAAAAElFTkSuQmCC);
+      font-size: 10px;
+      color: #fff;
+      position: absolute;
+      right: 103%;
+      top: 50%;
+      transform: translateY(-50%) rotate(-90deg);
+    }
+  }
+  .step.left {
+    &::before {
+      left: 103%;
+      transform: translateY(-50%) rotate(90deg);
+      right: auto;
+    }
+  }
+  .step.top {
+    &::before {
+      top: 110%;
+      left: 50%;
+      transform: translateX(-50%) rotate(180deg);
+      right: auto;
+    }
+  }
+  .step.bottom {
+    &::before {
+      bottom: 110%;
+      top: auto;
+      left: 50%;
+      transform: translateX(-50%);
+      right: auto;
+    }
   }
   .next {
     position: fixed;
     bottom: 10%;
     left: 50%;
     transform: translateX(-50%);
+    cursor: pointer;
   }
-  .act{
+  .act {
     animation: act 1s linear;
   }
   @keyframes act {
-    0%{opacity: 0;}
-    100%{opacity: 1;}
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 }
 </style>

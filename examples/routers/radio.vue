@@ -156,7 +156,7 @@
   <br />
   <br />
   <Checkbox :checked.sync="single"></Checkbox>
-  <step :is-step-show="isStepShow" :list="list" v-ref:step></step>
+  <step :next-text = 'nextText' :is-step-show="isStepShow" :list="list" v-ref:step></step>
   <br /> 
   <br /> 
   <br /> 
@@ -215,6 +215,8 @@
   <br /> 
   <br /> 
   <br /> 
+  <!-- <button @click="open" style="position:fixed;z-index:9999;left:0;bottom:0;">打开</button>
+  <button @click="changeList" style="position:fixed;z-index:9999;left:0;bottom:60px;">更改数据</button> -->
 </template>
 <script>
 import {
@@ -269,32 +271,63 @@ export default {
       disabledGroup: ["苹果"],
       list: [
         {
+          // title: "步骤二",
+          text: "这是第二个步骤的提示文字",
+          el: "btn2",
+          position: "bottom",
+          size: 22
+        },
+        {
           title: "步骤一",
           text: "这是第一个步骤的提示文字",
           el: "btn1",
           position: "right",
-          size: 0
+          size: 22
         },
-        {
-          title: "步骤二",
-          text: "这是第二个步骤的提示文字",
-          el: "btn2",
-          position: "bottom",
-          size: 0
-        },
+        
         {
           title: "步骤三",
           text: "这是第三个步骤的提示文字",
           el: "btn3",
           position: "left",
-          size: 0
+          size: 22
         },
         {
           title: "步骤四",
           text: "这是第四个步骤的提示文字",
           el: "btn4",
           position: "top",
-          size: 0
+          size: 22
+        }
+      ],
+      list2: [
+        {
+          title: "步骤三",
+          text: "这是第三个步骤的提示文字",
+          el: "btn3",
+          position: "left",
+          size: 22
+        },
+        {
+          // title: "步骤二",
+          text: "这是第二个步骤的提示文字",
+          el: "btn2",
+          position: "bottom",
+          size: 22
+        },
+        {
+          title: "步骤一",
+          text: "这是第一个步骤的提示文字",
+          el: "btn1",
+          position: "right",
+          size: 22
+        },
+        {
+          title: "步骤四",
+          text: "这是第四个步骤的提示文字",
+          el: "btn4",
+          position: "top",
+          size: 22
         }
       ]
     };
@@ -309,6 +342,12 @@ export default {
     },
     change(status) {
       console.log(status);
+    },
+    open() {
+      this.$refs.step.open()
+    },
+    changeList() {
+      this.list = this.list2;
     }
   },
   ready() {
