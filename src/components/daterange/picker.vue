@@ -3,9 +3,9 @@
         :class="[prefixCls]"
         v-clickoutside="handleClose">
         <div v-el:reference :class="[prefixCls + '-rel']" @click="handleFocus" @mouseover="mouseEnter" @mouseout="mouseOut">
-            <span class="showDate">{{startDate}}</span>
-            <span class="link" v-show="startDate">~</span>
-            <span class="showDate">{{endDate}}</span>
+            <span class="showDate" :class="[startDate ? '' : 'nodate']">{{startDate | start}}</span>
+            <span class="link">~</span>
+            <span class="showDate" :class="[startDate ? '' : 'nodate']">{{endDate | end}}</span>
             <i class="icon"></i>
             <!-- <i class="icon-close" v-show="iconType" @click.stop="handleClear"></i> -->
         </div>
@@ -120,7 +120,9 @@
         components: { iInput, Drop },
         directives: { clickoutside },
         props: {
-            prefabtime: '',
+            prefabtime: {
+                type: Array
+            },
             format: {
                 type: String
             },
@@ -439,11 +441,16 @@
                     this.picker.handleClear();
                 }
             },
-            prefabtime (val) {
-                if(val) {
-                    this.internalValue = this.formatTime(parseInt(val));
-                } else {
-                    this.internalValue = '';
+            prefabtime: {
+                deep: true,
+                handler: function(val) {
+                    if (val.length = 2) {
+                        this.startDate = val[0];
+                        this.endDate = val[1];
+                    } else {
+                        his.startDate = '';
+                        this.endDate = '';
+                    }
                 }
             },
             value: {
@@ -480,8 +487,7 @@
                 } else {
                     this.$emit("get-time", val);
                 }
-            }
-
+            },
         },
         beforeDestroy () {
             if (this.picker) {
@@ -490,6 +496,10 @@
         },
         ready () {
             if (this.open !== null) this.visible = this.open;
+            if (this.prefabtime && this.prefabtime.length === 2) {
+                this.startDate = this.prefabtime[0];
+                this.endDate = this.prefabtime[1];
+            }
         },
         events: {
             'on-form-blur' () {
@@ -497,6 +507,22 @@
             },
             'on-form-change' () {
                 return false;
+            }
+        },
+        filters: {
+            start: function (startDate) {
+                if (startDate) {
+                    return startDate;
+                } else {
+                    return '开始时间';
+                }
+            },
+            end: function (endDate) {
+                if (endDate) {
+                    return endDate;
+                } else {
+                    return '结束时间';
+                }
             }
         }
     };

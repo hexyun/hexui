@@ -1,28 +1,30 @@
 <template>
-    <Date-range type="daterange" @get-time="getTime"></Date-range>
+    <Date-range :prefabtime="prefab" type="daterange" @get-time="getTime"></Date-range>
     <i-button @click="clear">清空时间</i-button>
+    <i-button @click="changeT">修改预设时间</i-button>
+    <i-button @click="changeT2">再改预设时间</i-button>
 </template>
 <script>
     export default {
         data () {
             return{
                 time: '',
-                prefab: 1567421316714
+                prefab: null
             }
         },
         methods: {
             getTime (t) {
-                console.log('父级结果', t);
+                console.log('父级结果', t); 
                 
             },
             clear () {
-              this.$children[0].handleClear();
+              this.prefab = [];
             },
-            showTime() {
-                this.prefab = 1567421316714;
+            changeT() {
+                this.prefab= ['1999-12-09','2020-01-02']
             },
-            clearTime() {
-                this.prefab = null;
+            changeT2() {
+                this.prefab= ['1992-01-09','2110-01-02']
             }
         }
     }

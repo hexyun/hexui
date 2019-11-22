@@ -1,7 +1,10 @@
 <template>
     <div :class="[prefixCls + '-body-wrapper']">
         <div :class="[prefixCls + '-body']" id="time-right">
-            <div :class="[timePrefixCls + '-header']" v-if="showDate">时 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 分</div>
+            <div :class="[timePrefixCls + '-header']" v-if="showDate">
+                <span class="hours">时</span>
+                <span class="min">分</span>
+            </div>
             <div :class="[prefixCls + '-content']">
                 <time-spinner
                     v-ref:time-spinner
