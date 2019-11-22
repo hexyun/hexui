@@ -5,11 +5,11 @@
             v-el:reference
             @click="toggleMenu">
             <div class="ivu-tag" v-for="item in selectedMultiple">
-                <span class="ivu-tag-text">{{ item.label }}</span>
+                <span class="ivu-tag-text">{{ item.label | cutAnd }}</span>
                 <Icon type="ios-close-empty" @click.stop="removeTag($index)"></Icon>
             </div>
             <span :class="[prefixCls + '-placeholder']" v-show="showPlaceholder && !filterable">{{ placeholder }}</span>
-            <span :class="[prefixCls + '-selected-value']" v-show="!showPlaceholder && !multiple && !filterable">{{ selectedSingle }}</span>
+            <span :class="[prefixCls + '-selected-value']" v-show="!showPlaceholder && !multiple && !filterable">{{ selectedSingle | cutAnd }}</span>
             <input
                 type="text"
                 v-if="filterable"
@@ -87,6 +87,11 @@
                 default () {
                     return t('i.select.noMatch');
                 }
+            }
+        },
+        filters: {
+            cutAnd(val) {
+                return val.replace(/&amp;/g, '&');
             }
         },
         data () {
@@ -453,7 +458,7 @@
                         if (model !== '') {
                             this.findChild((child) => {
                                 if (child.value === model) {
-                                    this.query = child.label === undefined ? child.searchLabel : child.label;
+                                    this.query = (child.label === undefined ? child.searchLabel : child.label).replace(/&amp;/g, '&');
                                 }
                             });
                         } else {
@@ -477,18 +482,18 @@
             },
             setQuery (query) {
                 if (!this.filterable) return;
-                this.query = query;
+                this.query = query.replace(/&amp;/g, '&');
             },
             modelToQuery() {
                 if (!this.multiple && this.filterable && this.model) {
                     this.findChild((child) => {
                         if (this.model === child.value) {
                             if (child.label) {
-                                this.query = child.label;
+                                this.query = child.label.replace(/&amp;/g, '&');
                             } else if (child.searchLabel) {
-                                this.query = child.searchLabel;
+                                this.query = child.searchLabel.replace(/&amp;/g, '&');
                             } else {
-                                this.query = child.value;
+                                this.query = child.value.replace(/&amp;/g, '&');
                             }
                         }
                     });
@@ -589,7 +594,7 @@
                         if (this.filterable) {
                             this.findChild((child) => {
                                 if (child.value === value) {
-                                    this.query = child.label === undefined ? child.searchLabel : child.label;
+                                    this.query = (child.label === undefined ? child.searchLabel : child.label).replace(/&amp;/g, '&');
                                 }
                             });
                         }

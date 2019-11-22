@@ -1,7 +1,7 @@
 <template>
     <Row>
         <i-col span="12" style="padding-right:10px">
-            <i-select :model.sync="model111" filterable>
+            <i-select :model.sync="model111" >
                 <i-option v-for="item in cityList1" :value="item.value">{{ item.label }}</i-option>
             </i-select>
         </i-col>
@@ -9,7 +9,7 @@
     <Row>
         <i-col span="12" style="padding-right:10px">
             <i-select :model.sync="model112" filterable>
-                <i-option v-for="item in cityList2" :value="item.value">{{ item.label }}</i-option>
+                <i-option v-for="item in cityList1" :value="item.value">{{ item.label }}</i-option>
             </i-select>
         </i-col>
     </Row>
@@ -25,7 +25,7 @@
 const cityList = [
     {
         value: 'beijing',
-        label: '北京市'
+        label: '北京        市'
     },
     {
         value: 'shanghai',
@@ -45,17 +45,17 @@ const cityList = [
     },
     {
         value: 'chongqing',
-        label: '重庆市'
+        label: '重&庆市'
     }
 ]
     export default {
         data () {
             return {
                 cityList1: cityList,
-                model111: '',
+                model111: null,
 
                 cityList2: [],
-                model112: 'beijing',
+                model112: null,
 
                 model12: []
             }
