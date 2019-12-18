@@ -87,6 +87,10 @@
                 default () {
                     return t('i.select.noMatch');
                 }
+            },
+            autoSelect: {
+                type: Boolean,
+                default: false
             }
         },
         filters: {
@@ -207,7 +211,6 @@
                         this.optionInstances.push(child);
                     }
                 });
-
                 this.options = options;
 
                 if (init) {
@@ -567,7 +570,16 @@
                     });
                     this.notFound = is_hidden;
                 });
+                // 当搜索结果只有一个时，自动选中
+                let searchResult = this.optionInstances.filter(item => !item.hidden);
+                if (searchResult.length === 1 && this.autoSelect) {
+                    this.model = searchResult[0].value
+                    this.query = (searchResult[0].label === undefined ? searchResult[0].searchLabel : searchResult[0].label);
+                    this.$els.input.blur();
+                    this.visible = false;
+                }
                 this.$broadcast('on-update-popper');
+
             }
         },
         events: {

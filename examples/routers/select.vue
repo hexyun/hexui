@@ -8,7 +8,7 @@
     </Row>
     <Row>
         <i-col span="12" style="padding-right:10px">
-            <i-select :model.sync="model112" filterable>
+            <i-select :model.sync="model112" filterable :auto-select="true" @on-change="change">
                 <i-option v-for="item in cityList1" :value="item.value">{{ item.label }}</i-option>
             </i-select>
         </i-col>
@@ -25,7 +25,7 @@
 const cityList = [
     {
         value: 'beijing',
-        label: '北京        市'
+        label: '北京市'
     },
     {
         value: 'shanghai',
@@ -65,6 +65,12 @@ const cityList = [
           setTimeout(()=>{
             this.cityList2 = cityList
           }, 500)
+        },
+        methods: {
+            change(e) {
+                console.log(e)
+            }
         }
+        
     }
 </script>
