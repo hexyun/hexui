@@ -20,6 +20,7 @@
                 @blur="handleBlur"
                 @keydown="resetInputState"
                 @keydown.delete="handleInputDelete"
+                @keydown.enter="selectFirst"
                 v-el:input>
             <Icon type="ios-close" :class="[prefixCls + '-arrow']" v-show="showCloseIcon" @click.stop="clearSingleSelect"></Icon>
             <Icon type="arrow-down-b" :class="[prefixCls + '-arrow']"></Icon>
@@ -91,6 +92,13 @@
             autoSelect: {
                 type: Boolean,
                 default: false
+            },
+            multipleLimit: {
+                type: [Number, String]
+            },
+            defaultFirstPption: {
+                type: Boolean,
+                default: false
             }
         },
         filters: {
@@ -160,6 +168,17 @@
             }
         },
         methods: {
+            selectFirst () {
+                if (!this.defaultFirstPption) return;
+                let searchResult = this.optionInstances.filter(item => !item.hidden);
+                if (this.defaultFirstPption && !this.multiple) {
+                    this.model = searchResult[0].value
+                    // this.query = (searchResult[0].label === undefined ? searchResult[0].searchLabel : searchResult[0].label);
+                    this.$els.input.blur();
+                    this.visible = false;
+                }
+                this.$broadcast('on-update-popper');
+            },
             toggleMenu () {
                 if (this.disabled) {
                     return false;
@@ -592,7 +611,11 @@
                         if (index >= 0) {
                             this.removeTag(index);
                         } else {
-                            this.model.push(value);
+                            if (this.multipleLimit && parseInt(this.multipleLimit) > 0 && this.model.length < parseInt(this.multipleLimit)) {
+                                this.model.push(value);
+                            } else if (!this.multipleLimit) {
+                                this.model.push(value);
+                            }
                             this.$broadcast('on-update-popper');
                         }
 
