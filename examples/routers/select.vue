@@ -8,7 +8,7 @@
     </Row>
     <Row>
         <i-col span="12" style="padding-right:10px">
-            <i-select :model.sync="model112" filterable :auto-select="true" @on-change="change" :default-first-pption="true">
+            <i-select :model.sync="model112" filterable :auto-select="true" @on-change="change" :default-first-option="true">
                 <i-option v-for="item in cityList1" :value="item.value">{{ item.label }}</i-option>
             </i-select>
         </i-col>

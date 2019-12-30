@@ -96,7 +96,7 @@
             multipleLimit: {
                 type: [Number, String]
             },
-            defaultFirstPption: {
+            defaultFirstOption: {
                 type: Boolean,
                 default: false
             }
@@ -169,9 +169,9 @@
         },
         methods: {
             selectFirst () {
-                if (!this.defaultFirstPption) return;
+                if (!this.defaultFirstOption) return;
                 let searchResult = this.optionInstances.filter(item => !item.hidden);
-                if (this.defaultFirstPption && !this.multiple) {
+                if (this.defaultFirstOption && !this.multiple) {
                     this.model = searchResult[0].value
                     // this.query = (searchResult[0].label === undefined ? searchResult[0].searchLabel : searchResult[0].label);
                     this.$els.input.blur();
