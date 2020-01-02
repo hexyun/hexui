@@ -174,12 +174,22 @@ export default {
       this.firstDay = new Date(
         `${this.currentYear}-${this.currentMonth + 1}-1`
       )
+      for (let i = 0; i < this.monthDays[this.currentMonth]; i++) {
+        // 当前月份
+        this.list.push({
+          y: this.currentYear,
+          m: this.currentMonth + 1,
+          d: i + 1,
+          cur: true
+        })
+      }
+      console.log('zhengchang', this.list);
       this.firstnow = this.firstDay.getDay() // 当月第一日是星期几 1-7
       if (this.firstnow === 0) this.firstnow = 7
       if (this.firstnow > 1) {
         // 前一个月份
         let monIndex = this.currentMonth
-        let year
+        let year = this.currentYear
         if (monIndex === 0) {
           year--
           monIndex = 11
@@ -192,22 +202,14 @@ export default {
             m: monIndex + 1,
             d: this.monthDays[monIndex] - i
           })
+          console.log('pre', this.list);
         }
-      }
-      for (let i = 0; i < this.monthDays[this.currentMonth]; i++) {
-        // 当前月份
-        this.list.push({
-          y: this.currentYear,
-          m: this.currentMonth + 1,
-          d: i + 1,
-          cur: true
-        })
       }
       const num = (this.monthDays[this.currentMonth] + this.firstnow - 1) % 7
       if (num > 0) {
         // 下个月份
         let monIndex2 = this.currentMonth
-        let year2
+        let year2 = this.currentYear
         if (monIndex2 === 11) {
           year2++
           monIndex2 = 0
@@ -220,6 +222,7 @@ export default {
             m: monIndex2 + 1,
             d: i + 1
           })
+          console.log('next', this.list);
         }
       }
     this.addThings()
