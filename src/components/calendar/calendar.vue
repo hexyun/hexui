@@ -184,9 +184,11 @@ export default {
         })
       }
       console.log('zhengchang', this.list);
+      console.log('firstnow',this.firstnow);
       this.firstnow = this.firstDay.getDay() // 当月第一日是星期几 1-7
       if (this.firstnow === 0) this.firstnow = 7
       if (this.firstnow > 1) {
+        console.log('firstnow>1',this.firstnow);
         // 前一个月份
         let monIndex = this.currentMonth
         let year = this.currentYear
@@ -197,6 +199,7 @@ export default {
           monIndex--
         }
         for (let i = 0; i < this.firstnow - 1; i++) {
+          console.log('firstnow1',this.firstnow)
           this.list.unshift({
             y: year,
             m: monIndex + 1,
@@ -206,6 +209,7 @@ export default {
         }
       }
       const num = (this.monthDays[this.currentMonth] + this.firstnow - 1) % 7
+      console.log('num',num);
       if (num > 0) {
         // 下个月份
         let monIndex2 = this.currentMonth
@@ -217,6 +221,7 @@ export default {
           monIndex2++
         }
         for (let i = 0; i < 7 - num; i++) {
+          console.log('num1', num);
           this.list.push({
             y: year2,
             m: monIndex2 + 1,
