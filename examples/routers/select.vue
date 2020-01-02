@@ -8,14 +8,21 @@
     </Row>
     <Row>
         <i-col span="12" style="padding-right:10px">
-            <i-select :model.sync="model112" filterable :auto-select="true" @on-change="change" :default-first-option="true">
+            <i-select 
+                :model.sync="model112" 
+                filterable 
+                :auto-select="true" 
+                @on-clear="clear" 
+                :clearable="true"
+                @on-change="change" 
+                :default-first-option="true">
                 <i-option v-for="item in cityList1" :value="item.value">{{ item.label }}</i-option>
             </i-select>
         </i-col>
     </Row>
     <Row>
         <i-col span="12">
-            <i-select :model.sync="model12" filterable multiple :multiple-limit="3">
+            <i-select :model.sync="model12" @remove-tag="removeTag" filterable multiple :multiple-limit="3">
                 <i-option v-for="item in cityList1" :value="item.value">{{ item.label }}</i-option>
             </i-select>
         </i-col>
@@ -69,6 +76,13 @@ const cityList = [
         methods: {
             change(e) {
                 console.log(e)
+            },
+            clear() {
+                console.log('清空了')
+            },
+            removeTag(e) {
+                console.log('removeTag', e);
+                
             }
         }
         

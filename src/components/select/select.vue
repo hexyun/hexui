@@ -313,13 +313,14 @@
                 if (this.disabled) {
                     return false;
                 }
-                this.model.splice(index, 1);
+                let removed = this.model.splice(index, 1);
 
                 if (this.filterable && this.visible) {
                     this.$els.input.focus();
                 }
 
                 this.$broadcast('on-update-popper');
+                this.$emit('remove-tag', removed);
             },
             // to select option for single
             toggleSingleSelected (value, init = false) {
@@ -552,7 +553,10 @@
         },
         watch: {
             model (val) {
-                if (val === '') this.query = '';
+                if (val === '' || (Array.isArray(val) && val.length === 0)) {
+                    this.query = '';
+                    this.$emit('on-clear');
+                }
                 this.modelToQuery();
                 if (this.multiple) {
                     if (this.slotChangeDuration) {
