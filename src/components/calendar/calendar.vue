@@ -172,7 +172,7 @@ export default {
         31
       ]
       this.firstDay = new Date(
-        `${this.currentYear}-${this.currentMonth + 1}-1`
+        `${this.currentYear}/${this.currentMonth + 1}/1`
       )
       for (let i = 0; i < this.monthDays[this.currentMonth]; i++) {
         // 当前月份
@@ -184,7 +184,7 @@ export default {
         })
       }
       console.log('zhengchang', this.list);
-      console.log('firstnow',this.firstnow);
+      console.log('firstday',this.firstDay.getDay());
       this.firstnow = this.firstDay.getDay() // 当月第一日是星期几 1-7
       if (this.firstnow === 0) this.firstnow = 7
       if (this.firstnow > 1) {
