@@ -55,7 +55,10 @@
         @click="selectedDay(item, index)"
         :style="{ 'border-color': color || '#E9E9E9'}"
       >
-        <div class="day" :class="{'text-color': item.cur}">{{item.d}}</div>
+        <div class="dayDiv">
+          <div class="day" :class="{'text-color': item.cur}">{{item.d}}</div>
+          <div class="dayIcon" v-if="haveThing && item.thingDate"></div>
+        </div>
         <div class="content">
           <div
             class="things"
@@ -92,7 +95,7 @@
 import Vue from 'vue';
 export default {
   name: 'calendar',
-  props: ['things', 'prefab', 'color', 'max'],
+  props: ['things', 'prefab', 'color', 'max', 'haveThing', 'thingDate'],
   data () {
     return {
       year: new Date().getFullYear(), // 今日年份
@@ -140,11 +143,36 @@ export default {
       this.currentMonth = prefab.getMonth();
       this.currentDay = prefab.getDate();
       this.showCalender('prefab');
+      this.isHaveThing();
+      console.log(typeof(this.thingDate));
+      console.log(this.haveThing);
     } else {
       this.showCalender();
+      this.isHaveThing();
+      console.log(typeof(this.thingDate));
+      console.log(this.haveThing);
     }
   },
   methods: {
+    isHaveThing () {
+      if (this.haveThing) {
+      if (this.thingDate) {
+        return;
+      } else {
+        this.list.map((item) => {
+          this.thingDate.map((itemThing) => {
+            if (item.y + '/' + item.m + '/' + item.d == itemThing) {
+              item.thingDate = true;
+            }
+            return this.list;
+          })
+        })
+        console.log(this.list);
+      }
+    } else {
+      console.log('不显示红点');
+    }
+    },
     isLeap (year) {
       // 判断是不是闰年
       return (year % 100 === 0 ? (year % 400 === 0 ? 1 : 0) : (year % 4 === 0 ? 1 : 0))
@@ -272,6 +300,7 @@ export default {
       }
       this.selected = null
       this.showCalender('pre')
+      this.isHaveThing();
     },
     nextMon () {
       if (this.statu === 'years') {
@@ -285,17 +314,20 @@ export default {
         this.currentMonth++
       }
       this.showCalender('next')
+      this.isHaveThing();
       this.selected = null;
     },
     today () {
       this.statu = 'days'
       this.showCalender()
+      this.isHaveThing();
     },
     selectedMonths (month) {
       if (this.statu !== 'months') return
       this.currentMonth = month
       this.statu = 'days'
       this.showCalender('select')
+      this.isHaveThing();
     },
     selectedYears (year) {
       if (this.statu !== 'years') return
@@ -330,12 +362,26 @@ export default {
     things() {
       this.addThings()
       this.showCalender('thing');
+      this.isHaveThing();
     }
   }
 }
 </script>
 
 <style scoped>
+.dayDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.dayIcon {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: red;
+  margin-right: 4px;
+  margin-top: 6px;
+}
 .celendar {
   height: 100%;
 }
