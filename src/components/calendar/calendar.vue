@@ -151,6 +151,7 @@ export default {
   },
   methods: {
     isHaveThing () {
+      console.log(this.havething);
       if (this.havething) {
       if (this.thingdate) {
         return;
