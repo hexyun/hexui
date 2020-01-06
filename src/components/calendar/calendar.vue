@@ -153,7 +153,7 @@ export default {
     isHaveThing () {
       console.log(this.havething);
       if (this.havething) {
-      if (this.thingdate) {
+      if (!this.thingdate) {
         return;
       } else {
         this.list.map((item) => {
