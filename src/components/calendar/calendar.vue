@@ -57,7 +57,7 @@
       >
         <div class="dayDiv">
           <div class="day" :class="{'text-color': item.cur}">{{item.d}}</div>
-          <div class="dayIcon" v-if="haveThing && item.thingDate"></div>
+          <div class="dayIcon" v-if="havething && item.thingdate"></div>
         </div>
         <div class="content">
           <div
@@ -95,7 +95,7 @@
 import Vue from 'vue';
 export default {
   name: 'calendar',
-  props: ['things', 'prefab', 'color', 'max', 'haveThing', 'thingDate'],
+  props: ['things', 'prefab', 'color', 'max', 'havething', 'thingdate'],
   data () {
     return {
       year: new Date().getFullYear(), // 今日年份
@@ -144,25 +144,21 @@ export default {
       this.currentDay = prefab.getDate();
       this.showCalender('prefab');
       this.isHaveThing();
-      console.log(typeof(this.thingDate));
-      console.log(this.haveThing);
     } else {
       this.showCalender();
       this.isHaveThing();
-      console.log(typeof(this.thingDate));
-      console.log(this.haveThing);
     }
   },
   methods: {
     isHaveThing () {
-      if (this.haveThing) {
-      if (this.thingDate) {
+      if (this.havething) {
+      if (this.thingdate) {
         return;
       } else {
         this.list.map((item) => {
-          this.thingDate.map((itemThing) => {
+          this.thingdate.map((itemThing) => {
             if (item.y + '/' + item.m + '/' + item.d == itemThing) {
-              item.thingDate = true;
+              item.thingdate = true;
             }
             return this.list;
           })
