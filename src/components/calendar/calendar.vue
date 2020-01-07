@@ -95,7 +95,7 @@
 import Vue from 'vue';
 export default {
   name: 'calendar',
-  props: ['things', 'prefab', 'color', 'max', 'havething', 'thingdate'],
+  props: ['things', 'prefab', 'color', 'max', 'havething', 'thingdate', 'recreat'],
   data () {
     return {
       year: new Date().getFullYear(), // 今日年份
@@ -156,10 +156,10 @@ export default {
       if (!this.thingdate) {
         return;
       } else {
-        this.list.map((item) => {
+        this.list.map((item, index) => {
           this.thingdate.map((itemThing) => {
             if (item.y + '/' + item.m + '/' + item.d == itemThing) {
-              item.thingdate = true;
+              this.list.$set(index, {...this.list[index], thingdate: true})
             }
             return this.list;
           })
@@ -359,6 +359,10 @@ export default {
     things() {
       this.addThings()
       this.showCalender('thing');
+      this.isHaveThing();
+    },
+    recreat () {
+      console.log('bian');
       this.isHaveThing();
     }
   }
