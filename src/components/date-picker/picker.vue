@@ -19,7 +19,7 @@
                     :icon="iconType"></i-input>
             </slot>
         </div>
-        <Drop v-show="opened" :placement="placement" :transition="transition" v-ref:drop>
+        <Drop :class="{'seconds': type === 'datetime' && (format || '').indexOf('ss') > -1}" v-show="opened" :placement="placement" :transition="transition" v-ref:drop>
             <div v-el:picker></div>
         </Drop>
     </div>
@@ -130,7 +130,9 @@
         components: { iInput, Drop },
         directives: { clickoutside },
         props: {
-            prefabtime: '',
+            prefabtime: {
+                type: [Number, Array, String]
+            },
             format: {
                 type: String
             },
@@ -220,20 +222,25 @@
                 get () {
                     let value = this.internalValue;
                     // 设置时间的初始值 ----------
-                    const prefabtime = this.formatTime(parseInt(this.prefabtime));
-                    this.index++;
-                    if (prefabtime && this.index < 3) {
-                        value = prefabtime;
-                    }
-                    // --------------------------
-                    if (!value) return;
                     const formatter = (
                         TYPE_VALUE_RESOLVER_MAP[this.type] ||
                         TYPE_VALUE_RESOLVER_MAP['default']
                     ).formatter;
+                    this.index++;
+                    if (this.prefabtime && this.index < 3) {
+                        if (this.type === 'datetimerange' && Array.isArray(this.prefabtime) && this.prefabtime.length === 2) {
+                            value = this.prefabtime
+                        } else
+                            value = this.formatTime(parseInt(this.prefabtime));
+                    }
+                    // --------------------------
+                    if (!value) return;
                     const format = DEFAULT_FORMATS[this.type];
-                    return formatter(value, this.format || format);
-                    return value;
+                    if (this.type === 'datetime' && this.format.indexOf('ss') > -1) {
+                        return this.formatTime(value)
+                    }
+                    let val = formatter(value, this.format || format);
+                    return val
                 },
                 set (value) {
                     if (value) {
@@ -370,6 +377,7 @@
                     this.picker.value = this.internalValue;
                     this.picker.confirm = this.confirm;
                     this.picker.selectionMode = this.selectionMode;
+                    this.picker.showSeconds = this.type === 'datetime' && this.format.indexOf('ss') > -1;
                     if (this.format) this.picker.format = this.format;
                     // TimePicker
                     if (this.disabledHours) this.picker.disabledHours = this.disabledHours;
@@ -412,12 +420,22 @@
                     TYPE_VALUE_RESOLVER_MAP[type] ||
                     TYPE_VALUE_RESOLVER_MAP['default']
                 ).formatter;
-                let newDate = formatter(date, format);
-                if (type === 'daterange' || type === 'timerange') {
-                    newDate = [newDate.split(RANGE_SEPARATOR)[0], newDate.split(RANGE_SEPARATOR)[1]];
+                const parser = (
+                    TYPE_VALUE_RESOLVER_MAP[type] ||
+                    TYPE_VALUE_RESOLVER_MAP['default']
+                ).parser;
+                let newDate;
+                if (type === 'daterange' || type === 'timerange' || type === 'datetimerange') {
+                    newDate = parser(date);
+                    let hasDate = newDate && Array.isArray(newDate) && newDate.length === 2;
+                    this.prefabtime = hasDate ? [newDate[0].getTime(), newDate[1].getTime()] : [];
+                } else {
+                    let stamp = new Date(date);
+                    newDate = stamp.getTime() || '';
+                    this.prefabtime = newDate || 0;
                 }
-                this.$emit('get-time', newDate);
-                this.$emit('on-change', newDate);
+                this.$emit('get-time', this.prefabtime);
+                this.$emit('on-change', this.prefabtime);
                 this.$dispatch('on-form-change', newDate);
             },
             formatTime (t) {
@@ -430,7 +448,8 @@
                     prefixZero(date.getMonth() + 1) + '-' +
                     prefixZero(date.getDate()) + ' ' +
                     prefixZero(date.getHours()) + ':' +
-                    prefixZero(date.getMinutes());
+                    prefixZero(date.getMinutes()) + ':' +
+                    prefixZero(date.getSeconds());
             }
         },
         watch: {
@@ -454,10 +473,10 @@
                 }
             },
             prefabtime (val) {
-                if(val) {
-                    this.internalValue = this.formatTime(parseInt(val));
-                } else {
-                    this.internalValue = '';
+                if(val && typeof val === 'number') {
+                    this.internalValue = this.formatTime(val);
+                } else if (val && Array.isArray(val) && val.length === 2) {
+                    this.internalValue = val;
                 }
             },
             value: {
@@ -508,3 +527,14 @@
         }
     };
 </script>
+<style>
+.seconds #time-right {
+    min-width: 220px;
+}
+.seconds {
+    min-width: 430px !important;
+}
+.seconds .ivu-picker-confirm {
+    min-width: 430px;
+}
+</style>

@@ -10,7 +10,7 @@
                 <li :class="getCellCls(item)" v-for="item in minutesList" v-show="!item.hide" :index="$index">{{ formatTime(item.text) }}</li>
             </ul>
         </div>
-        <div :class="[prefixCls+ '-list']" v-show="showseconds" v-el:seconds>
+        <div :class="[prefixCls+ '-list']" v-show="showSeconds" v-el:seconds>
             <ul :class="[prefixCls + '-ul']" @click="handleClickSeconds">
                 <li :class="getCellCls(item)" v-for="item in secondsList" v-show="!item.hide" :index="$index">{{ formatTime(item.text) }}</li>
             </ul>
@@ -38,7 +38,7 @@
                 type: [Number, String],
                 default: 0
             },
-            showseconds: {
+            showSeconds: {
                 type: Boolean,
                 default: false
             }

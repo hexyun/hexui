@@ -182,9 +182,6 @@
     width: 73px !important;
 }
 
-.ivu-picker-confirm {
-    width: 360px;
-}
 .ivu-picker-panel-content .ivu-picker-panel-content .ivu-time-picker-cells-list ul .ivu-time-picker-cells-cell {
     padding-left: 32px;
 }
@@ -198,6 +195,16 @@
 .ivu-time-picker-header span {
     flex: 1;
 }
-.ivu-date-picker .ivu-select-dropdown {
-    width: 360px
+
+.ivu-date-picker-with-range .ivu-picker-panel-body {
+    min-width: 440px;
+    .ivu-picker-confirm {
+        width: 427px !important;
+    }
+}
+.ivu-select-dropdown > .ivu-picker-panel-body-wrapper > .ivu-picker-panel-body {
+    width: 360px;
+    > .ivu-picker-confirm {
+        width: 360px;
+    }
 }

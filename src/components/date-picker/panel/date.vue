@@ -62,6 +62,7 @@
                 <time-picker
                     v-ref:time-picker
                     show-date
+                    :show-seconds="showSeconds"
                     @on-pick="handleTimePick"
                     @on-pick-click="handlePickClick"></time-picker>
             </div>
@@ -109,6 +110,7 @@
                 disabledDate: '',
                 year: null,
                 month: null,
+                showSeconds: false,
                 confirm: false,
                 isTime: false,
                 format: 'yyyy-MM-dd'
