@@ -1,12 +1,12 @@
 <template>
   <div class="celendar">
     <div class="head">
-      <div class="time">
+      <div class="time" :style="{'color': textcolor || ''}">
         <span class="year" @click="statu = 'years'">{{currentYear}}年</span>
         <span class="month" @click="statu = 'months'" v-show="statu!=='years'">{{currentMonth + 1}}月</span>
       </div>
       <div class="button">
-        <div @click="preMon">
+        <div class="buttonLeft" @click="preMon">
           <svg
             t="1566202119123"
             class="icon"
@@ -24,7 +24,7 @@
           </svg>
         </div>
         <span class="today" @click="today">今天</span>
-        <div @click="nextMon">
+        <div class="buttonRight" @click="nextMon">
           <svg
             t="1566202156077"
             class="icon"
@@ -53,11 +53,11 @@
         v-for="(index,item) in list"
         :class="{'active': (item.y === currentYear && item.m === (currentM+1) && item.d === currentDay) || index === selected || (item.y===year && item.m === month && item.d === day)}"
         @click="selectedDay(item, index)"
-        :style="{ 'border-color': color || '#E9E9E9'}"
+        :style="{ 'border-color': color || '#E9E9E9', 'background-color': index === selected ? selectcolor : (item.y===year && item.m === month && item.d === day) ? currentcolor : ''}"
       >
         <div class="dayDiv">
           <div class="day" :class="{'text-color': item.cur}">{{item.d}}</div>
-          <div class="dayIcon" v-if="havething && item.thingdate"></div>
+          <div :class="index === selected ? 'dayicon': 'dayIcon'" v-if="havething && item.thingdate"></div>
         </div>
         <div class="content">
           <div
@@ -95,7 +95,7 @@
 import Vue from 'vue';
 export default {
   name: 'calendar',
-  props: ['things', 'prefab', 'color', 'max', 'havething', 'thingdate', 'recreat'],
+  props: ['things', 'prefab', 'color', 'max', 'havething', 'thingdate', 'recreat', 'selectcolor', 'currentcolor', 'textcolor'],
   data () {
     return {
       year: new Date().getFullYear(), // 今日年份
@@ -375,11 +375,19 @@ export default {
   flex-direction: row;
   justify-content: space-between;
 }
+.dayicon {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: white;
+  margin-right: 4px;
+  margin-top: 6px;
+}
 .dayIcon {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: red;
+  background-color: #F46262;
   margin-right: 4px;
   margin-top: 6px;
 }
@@ -448,7 +456,6 @@ li{
   color: #222;
 }
 .active{
-  background-color: #E9E9E9;
   color: black;
 }
 .active .day {
@@ -483,24 +490,39 @@ ul[class="months"] li {
 .button {
   display: inline-block;
   float: right;
-  top: 6.5px;
+  top: 0px;
   position: relative;
   bottom: -8px;
+  left: -8px;
 }
-.button > div {
+.buttonRight {
   display: inline-block;
   border: 1px solid #E9E9E9;
   padding: 0 8px;
   cursor: pointer;
+  width: 36px;
+  height:30px;
+  line-height:30px;
+  border-radius: 0px 4px 4px 0px;
+}
+.buttonLeft {
+  display: inline-block;
+  border: 1px solid #E9E9E9;
+  padding: 0 8px;
+  cursor: pointer;
+  width: 36px;
+  height:30px;
+  line-height:30px;
+  border-radius: 4px 0px 0px 4px;
 }
 .today {
   border: 1px solid #E9E9E9;
   padding: 0 8px;
   font-size: 13px;
-  height: 20px;
+  height: 30px;
+  line-height:30px;
   display: inline-block;
   top: 1px;
-  position: relative;
   cursor: pointer;
 }
 </style>
