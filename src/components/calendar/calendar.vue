@@ -51,13 +51,16 @@
     <ul class="date" v-show="statu==='days'">
       <li
         v-for="(index,item) in list"
-        :class="{'active': (item.y === currentYear && item.m === (currentM+1) && item.d === currentDay) || index === selected || (item.y===year && item.m === month && item.d === day)}"
+        :class="{'active': (item.y === currentYear && item.m === (currentM+1) && item.d === currentDay) || index === selected || (item.y===year && item.m === initMonth && item.d === day)}"
         @click="selectedDay(item, index)"
-        :style="{ 'border-color': color || '#E9E9E9', 'background-color': index === selected ? selectcolor : (item.y===year && item.m === month && item.d === day) ? currentcolor : ''}"
+        :style="{ 'border-color': color || '#E9E9E9', 'background-color': index === selected ? selectcolor : (item.y===year && item.m === initMonth && item.d === day) ? currentcolor : ''}"
       >
         <div class="dayDiv">
-          <div class="day" :class="{'text-color': item.cur}">{{item.d}}</div>
+          <div class="day" :class="index === selected ? 'textcolor' : ''">{{item.d}}</div>
           <div :class="index === selected ? 'dayicon': 'dayIcon'" v-if="havething && item.thingdate"></div>
+        </div>
+        <div class="ludarDiv" v-if="iflunar">
+          <div :class="index === selected ? 'textcolor ludar' : 'ludar'">{{item.lunar}}</div>
         </div>
         <div class="content">
           <div
@@ -95,11 +98,12 @@
 import Vue from 'vue';
 export default {
   name: 'calendar',
-  props: ['things', 'prefab', 'color', 'max', 'havething', 'thingdate', 'recreat', 'selectcolor', 'currentcolor', 'textcolor'],
+  props: ['things', 'prefab', 'color', 'max', 'havething', 'thingdate', 'recreat', 'selectcolor', 'currentcolor', 'textcolor', 'iflunar'],
   data () {
     return {
       year: new Date().getFullYear(), // 今日年份
       month: new Date().getMonth() + 1, // 今日月份
+      initMonth: new Date().getMonth() + 1,
       day: new Date().getDate(), // 今日日份
       currentYear: '', // 当前显示年份
       currentMonth: '', // 当前显示月份 0-11,显示时加一
@@ -123,7 +127,10 @@ export default {
         '十二月'
       ],
       weeks: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-      selected: null
+      selected: null,
+      days: [],
+      preDays: [],
+      nextDays: []
     }
   },
   computed: {
@@ -136,6 +143,7 @@ export default {
     }
   },
   compiled () {
+    this.getDays();
     if (this.prefab) {
       let prefab = new Date(this.prefab);
       this.currentYear = prefab.getFullYear();
@@ -150,6 +158,91 @@ export default {
     }
   },
   methods: {
+    getDays () { // 获取当前月份所有公历日期及其农历日期
+      this.days = []
+      this.preDays = []
+      this.nextDays = []
+      const time = new Date()
+      time.setFullYear(this.year, 1, 0)
+      console.log(this.year,this.month);
+      for (let i = 1; i <= time.getDate(); i++) {
+        this.days.push({gregorian: i, lunar: this.getLunarDay(this.year, this.month, i)})
+      }
+      for (let i = 1; i <= time.getDate(); i++) {
+        if (this.month == 1) {
+          let monthTemp = 12;
+          this.preDays.push({gregorian: i, lunar: this.getLunarDay(this.year - 1, monthTemp, i)})
+        }
+        else {
+          this.preDays.push({gregorian: i, lunar: this.getLunarDay(this.year, this.month - 1, i)})
+        }
+      }
+      for (let i = 1; i <= time.getDate(); i++) {
+        if (this.month == 12) {
+          this.nextDays.push({gregorian: i, lunar: this.getLunarDay(this.year + 1, 1, i)})
+        } else {
+          this.nextDays.push({gregorian: i, lunar: this.getLunarDay(this.year , this.month + 1, i)})
+        }
+      }
+      console.log('preDays', this.preDays);
+      console.log('days',this.days);
+      console.log('nextDays', this.nextDays);
+    },
+    getLunarDay (solarYear, solarMonth, solarDay) {
+      const madd = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
+      const numString = '一二三四五六七八九十'
+      const monString = '正二三四五六七八九十冬腊'
+      const CalendarData = [0xA4B, 0x5164B, 0x6A5, 0x6D4, 0x415B5, 0x2B6, 0x957, 0x2092F, 0x497, 0x60C96, 0xD4A, 0xEA5, 0x50DA9, 0x5AD, 0x2B6, 0x3126E, 0x92E, 0x7192D, 0xC95, 0xD4A, 0x61B4A, 0xB55, 0x56A, 0x4155B, 0x25D, 0x92D, 0x2192B, 0xA95, 0x71695, 0x6CA, 0xB55, 0x50AB5, 0x4DA, 0xA5B, 0x30A57, 0x52B, 0x8152A, 0xE95, 0x6AA, 0x615AA, 0xAB5, 0x4B6, 0x414AE, 0xA57, 0x526, 0x31D26, 0xD95, 0x70B55, 0x56A, 0x96D, 0x5095D, 0x4AD, 0xA4D, 0x41A4D, 0xD25, 0x81AA5, 0xB54, 0xB6A, 0x612DA, 0x95B, 0x49B, 0x41497, 0xA4B, 0xA164B, 0x6A5, 0x6D4, 0x615B4, 0xAB6, 0x957, 0x5092F, 0x497, 0x64B, 0x30D4A, 0xEA5, 0x80D65, 0x5AC, 0xAB6, 0x5126D, 0x92E, 0xC96, 0x41A95, 0xD4A, 0xDA5, 0x20B55, 0x56A, 0x7155B, 0x25D, 0x92D, 0x5192B, 0xA95, 0xB4A, 0x416AA, 0xAD5, 0x90AB5, 0x4BA, 0xA5B, 0x60A57, 0x52B, 0xA93, 0x40E95]
+      if (!(solarYear < 1921 || solarYear > 2021)) {
+        solarMonth = (parseInt(solarMonth) > 0) ? (solarMonth - 1) : 11
+        const timeArr = [solarYear, solarMonth, solarDay]
+        let TheDate = (timeArr.length !== 3) ? new Date() : new Date(timeArr[0], timeArr[1], timeArr[2])
+        let total, m, n, k
+        let isEnd = false
+        let theDateYear = TheDate.getFullYear()
+        total = (theDateYear - 1921) * 365 + Math.floor((theDateYear - 1921) / 4) + madd[TheDate.getMonth()] + TheDate.getDate() - 38
+        if (theDateYear % 4 === 0 && TheDate.getMonth() > 1) {
+          total++
+        }
+        for (m = 0; ; m++) {
+          k = (CalendarData[m] < 0xfff) ? 11 : 12
+          for (n = k; n >= 0; n--) {
+            if (total <= this.getBit(CalendarData[m], n)) {
+              isEnd = true
+              break
+            }
+            total = total - this.getBit(CalendarData[m], n)
+          }
+          if (isEnd) {
+            break
+          }
+        }
+        let cMonth, cDay // cYear,
+        // cYear = 1921 + m
+        cMonth = k - n + 1
+        cDay = total
+        if (k === 12) {
+          if (cMonth === Math.floor(CalendarData[m] / 0x10000) + 1) {
+            cMonth = 1 - cMonth
+          }
+          if (cMonth > Math.floor(CalendarData[m] / 0x10000) + 1) {
+            cMonth--
+          }
+        }
+        // let run = ''
+        let cDayStr = numString.charAt(cDay - 1)
+        /* if (cMonth < 1) {
+          run = '(闰)'
+        } */
+        if (cDay % 10 !== 0 || cDay === 10) {
+          cDayStr = numString.charAt((cDay - 1) % 10)
+        }
+        return cDay === 1 ? monString.charAt(cMonth - 1) + '月' : (cDay < 11 ? '初' : (cDay < 20 ? '十' : (cDay < 30 ? '廿' : '三十'))) + cDayStr // tgString.charAt((cYear - 4) % 10) + dzString.charAt((cYear - 4) % 12) + '年 ' + run + monString.charAt(cMonth - 1) + '月' +
+      }
+    },
+    getBit (m, n) {
+      return 29 + ((m >> n) & 1)
+    },
     isHaveThing () {
       console.log(this.havething);
       if (this.havething) {
@@ -200,20 +293,21 @@ export default {
         `${this.currentYear}/${this.currentMonth + 1}/1`
       )
       for (let i = 0; i < this.monthDays[this.currentMonth]; i++) {
-        // 当前月份
-        this.list.push({
-          y: this.currentYear,
-          m: this.currentMonth + 1,
-          d: i + 1,
-          cur: true
-        })
+        if (this.days[i].gregorian - 1 == i) {
+          // 当前月份
+          this.list.push({
+            y: this.currentYear,
+            m: this.currentMonth + 1,
+            d: i + 1,
+            cur: true,
+            lunar: this.days[i].lunar
+          })
+        }
       }
-      console.log('zhengchang', this.list);
-      console.log('firstday',this.firstDay.getDay());
+      console.log('list', this.list);
       this.firstnow = this.firstDay.getDay() // 当月第一日是星期几 1-7
       if (this.firstnow === 0) this.firstnow = 7
       if (this.firstnow > 1) {
-        console.log('firstnow>1',this.firstnow);
         // 前一个月份
         let monIndex = this.currentMonth
         let year = this.currentYear
@@ -224,17 +318,19 @@ export default {
           monIndex--
         }
         for (let i = 0; i < this.firstnow - 1; i++) {
-          console.log('firstnow1',this.firstnow)
-          this.list.unshift({
-            y: year,
-            m: monIndex + 1,
-            d: this.monthDays[monIndex] - i
+          this.preDays.map(item => {
+            if (item.gregorian == this.monthDays[monIndex] - i) {
+              this.list.unshift({
+                y: year,
+                m: monIndex + 1,
+                d: this.monthDays[monIndex] - i,
+                lunar: item.lunar
+              })
+            }
           })
-          console.log('pre', this.list);
         }
       }
       const num = (this.monthDays[this.currentMonth] + this.firstnow - 1) % 7
-      console.log('num',num);
       if (num > 0) {
         // 下个月份
         let monIndex2 = this.currentMonth
@@ -246,13 +342,16 @@ export default {
           monIndex2++
         }
         for (let i = 0; i < 7 - num; i++) {
-          console.log('num1', num);
-          this.list.push({
-            y: year2,
-            m: monIndex2 + 1,
-            d: i + 1
+          this.nextDays.map(item => {
+            if (item.gregorian == i + 1) {
+              this.list.push({
+                y: year2,
+                m: monIndex2 + 1,
+                d: i + 1,
+                lunar: item.lunar
+              })
+            }
           })
-          console.log('next', this.list);
         }
       }
     this.addThings()
@@ -285,6 +384,14 @@ export default {
       return hours + ':' + minutes
     },
     preMon () {
+      if (this.month == 1) {
+        this.month == 12
+        this.year = this.year - 1
+        this.getDays();
+      } else {
+        this.month = this.month - 1;
+        this.getDays();
+      }
       if (this.statu === 'years') {
         this.currentYear -= 4
         return
@@ -300,6 +407,14 @@ export default {
       this.isHaveThing();
     },
     nextMon () {
+      if (this.month == 12) {
+        this.month == 1
+        this.year = this.year + 1
+        this.getDays();
+      } else {
+        this.month = this.month + 1;
+        this.getDays();
+      }
       if (this.statu === 'years') {
         this.currentYear += 4
         return
@@ -370,6 +485,9 @@ export default {
 </script>
 
 <style scoped>
+.ludar {
+  margin-left: 4px;
+}
 .dayDiv {
   display: flex;
   flex-direction: row;
@@ -454,6 +572,9 @@ li{
 }
 .text-color{
   color: #222;
+}
+.textcolor {
+  color: white;
 }
 .active{
   color: black;
