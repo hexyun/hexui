@@ -385,7 +385,7 @@ export default {
     },
     preMon () {
       if (this.month == 1) {
-        this.month == 12
+        this.month = 12
         this.year = this.year - 1
         this.getDays();
       } else {
@@ -408,7 +408,7 @@ export default {
     },
     nextMon () {
       if (this.month == 12) {
-        this.month == 1
+        this.month = 1
         this.year = this.year + 1
         this.getDays();
       } else {
@@ -437,13 +437,16 @@ export default {
     selectedMonths (month) {
       if (this.statu !== 'months') return
       this.currentMonth = month
+      this.month = month + 1;
       this.statu = 'days'
+      this.getDays();
       this.showCalender('select')
       this.isHaveThing();
     },
     selectedYears (year) {
       if (this.statu !== 'years') return
-      this.currentYear = year
+      this.currentYear = year;
+      this.year = year;
       this.statu = 'months'
     },
     selectedDay (day, index) {
