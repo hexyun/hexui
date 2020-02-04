@@ -7,6 +7,12 @@
     <Date-picker type="daterange" placeholder="选择日期和时间" style="width: 300px"></Date-picker>
     <br>
     <Date-picker type="datetimerange" format="yyyy-MM-dd HH:mm" :prefabtime.sync="prefab" placeholder="选择日期和时间（不含秒）" style="width: 300px" @get-time="getTime"></Date-picker>
+    <div>年-月-日</div>
+    <Date-picker type="datetime" format="yyyy-MM-dd" placeholder="选择日期和时间"></Date-picker>
+    <div>时:分</div>
+    <Date-picker type="datetime" format="HH:mm" placeholder="选择日期和时间"></Date-picker>
+    
+    
     <i-button @click="showTime">显示时间</i-button>
     <i-button @click="showTime2">再显示时间</i-button>
     <i-button @click="clearTime">清空时间</i-button>

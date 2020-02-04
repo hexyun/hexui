@@ -19,7 +19,12 @@
                     :icon="iconType"></i-input>
             </slot>
         </div>
-        <Drop :class="{'seconds': type === 'datetime' && (format || '').indexOf('ss') > -1}" v-show="opened" :placement="placement" :transition="transition" v-ref:drop>
+        <Drop 
+            :class="{'seconds': type === 'datetime' && (format || '').indexOf('ss') > -1, 'onle-time': type === 'datetime' && format === 'HH:mm', 'onle-date': type === 'datetime' && format.indexOf('HH:mm') == -1}"
+            v-show="opened" 
+            :placement="placement" 
+            :transition="transition" 
+            v-ref:drop>
             <div v-el:picker></div>
         </Drop>
     </div>
@@ -366,7 +371,7 @@
                 this.$emit('on-clear');
                 this.$dispatch('on-form-change', '');
             },
-            showPicker () {
+            showPicker () { 
                 if (!this.picker) {
                     const type = this.type;
                     this.picker = new Vue(this.panel).$mount(this.$els.picker);
@@ -378,6 +383,7 @@
                     this.picker.confirm = this.confirm;
                     this.picker.selectionMode = this.selectionMode;
                     this.picker.showSeconds = this.type === 'datetime' && this.format.indexOf('ss') > -1;
+                    if (this.format && this.type === 'datetime' && this.format == 'HH:mm') this.picker.currentView = 'time'
                     if (this.format) this.picker.format = this.format;
                     // TimePicker
                     if (this.disabledHours) this.picker.disabledHours = this.disabledHours;
@@ -388,6 +394,7 @@
                     for (const option in options) {
                         this.picker[option] = options[option];
                     }
+                    console.log('showPicker', this.picker)
                     this.picker.$on('on-pick', (date, visible = false, isEmit = false) => {
                         if (!this.confirm) this.visible = visible;
                         this.value = date;
@@ -459,7 +466,7 @@
                     this.$refs.drop.update();
                     if (this.open === null) this.$emit('on-open-change', true);
                 } else {
-                    if (this.picker) this.picker.resetView && this.picker.resetView(true);
+                    if (this.picker && this.format != 'HH:mm') this.picker.resetView && this.picker.resetView(true);
                     this.$refs.drop.destroy();
                     if (this.open === null) {
                         this.$emit('on-open-change', false);
@@ -537,4 +544,22 @@
 .seconds .ivu-picker-confirm {
     min-width: 430px;
 }
+/* 只显示时间的样式 */
+.onle-time .ivu-picker-confirm, 
+.onle-time > .ivu-picker-panel-body-wrapper > .ivu-picker-panel-body,
+.onle-time .ivu-picker-confirm{
+    width: unset !important;
+}
+.onle-time #time-right {
+    position: relative;
+    left: 0;
+}
+
+/* 只显示日期的样式 */
+.onle-date .ivu-picker-confirm, 
+.onle-date > .ivu-picker-panel-body-wrapper > .ivu-picker-panel-body,
+.onle-date .ivu-picker-confirm{
+    width: unset !important;
+}
+
 </style>

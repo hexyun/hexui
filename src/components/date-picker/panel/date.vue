@@ -60,6 +60,7 @@
                     @on-pick="handleMonthPick"
                     @on-pick-click="handlePickClick"></month-table>
                 <time-picker
+                    v-if="format.indexOf('HH:mm') > -1"
                     v-ref:time-picker
                     show-date
                     :show-seconds="showSeconds"
