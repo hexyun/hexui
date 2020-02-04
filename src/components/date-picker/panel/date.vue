@@ -159,7 +159,7 @@
                 if (this.showTime) this.$refs.timePicker.format = val;
             },
             currentView (val) {
-                if (val === 'time') this.$refs.timePicker.updateScroll();
+                if (val === 'time' && this.$refs.timePicker && this.$refs.timePicker.updateScroll) this.$refs.timePicker.updateScroll();
             }
         },
         methods: {

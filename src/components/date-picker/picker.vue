@@ -394,7 +394,6 @@
                     for (const option in options) {
                         this.picker[option] = options[option];
                     }
-                    console.log('showPicker', this.picker)
                     this.picker.$on('on-pick', (date, visible = false, isEmit = false) => {
                         if (!this.confirm) this.visible = visible;
                         this.value = date;
