@@ -9,8 +9,13 @@
             :disabled="disabled"
             @on-change="handleInputChange"></Input-number>
         <div :class="[prefixCls + '-wrap']" v-el:slider @click.self="sliderClick">
+            <!-- 默认的步长点 -->
             <template v-if="showStops">
                 <div :class="[prefixCls + '-stop']" v-for="item in stops" :style="{ 'left': item + '%' }" @click.self="sliderClick"></div>
+            </template>
+            <!-- 步长点 线上刻度 -->
+            <template v-if="showScale">
+                <div :class="[prefixCls + '-scale']" v-for="(index, item) in scale" :style="{ 'left': index / (scale.length - 1) * 100 + '%' }" @click.self="sliderClick">{{item}}</div>
             </template>
             <div :class="[prefixCls + '-bar']" :style="barStyle" @click.self="sliderClick"></div>
             <template v-if="range">
@@ -98,6 +103,16 @@
                 validator (value) {
                     return oneOf(value, ['hover', 'always', 'never']);
                 }
+            },
+            // 分段线上步长, 每10个点线上一个, 项目专用
+            sectionStops: {
+                type: Boolean,
+                default: false
+            },
+            // 显示刻度
+            showScale: {
+                type: Boolean,
+                default: false
             }
         },
         data () {
@@ -174,8 +189,24 @@
                 let result = [];
                 let stepWidth = 100 * this.step / (this.max - this.min);
                 for (let i = 1; i < stopCount; i++) {
-                    result.push(i * stepWidth);
+                    if(this.sectionStops) {
+                        if(i * stepWidth % 10 === 0) {
+                            result.push(i * stepWidth);
+                        }
+                    } else {
+                        result.push(i * stepWidth);
+                    }
                 }
+                return result;
+            },
+            // 刻度
+            scale() {
+                let result = [];
+                for (let i = this.min; i <= this.max; i++) {
+                    result.push(i);
+                }
+                console.log(result);
+                
                 return result;
             },
             sliderWidth () {
@@ -295,9 +326,8 @@
             changeSinglePosition (newPos) {
                 if (newPos >= 0 && (newPos <= 100)) {
                     const lengthPerStep = 100 / ((this.max - this.min) / this.step);
-                    const steps = Math.round(newPos / lengthPerStep);
-
-                    this.value = Math.round(steps * lengthPerStep * (this.max - this.min) * 0.01 + this.min);
+                    const steps = Math.round(newPos / lengthPerStep);       
+                    this.value = Math.round((steps * lengthPerStep * (this.max - this.min) * 0.01 + this.min) * 10) / 10;          
                     this.setSinglePosition(this.value);
                     if (!this.dragging) {
                         if (this.value !== this.oldSingleValue) {
@@ -435,3 +465,17 @@
         }
     };
 </script>
+<style scope>
+.ivu-slider-scale {
+    position: absolute;
+    transform: translate(-3px, 11px);
+}
+.ivu-slider-scale::before {
+    content: '';
+    width: 2px;
+    height: 6px;
+    transform: translate(2px, -7px);
+    background: #CCC;
+    position: absolute;
+}
+</style>
