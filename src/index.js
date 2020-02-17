@@ -46,7 +46,7 @@ import locale from './locale';
 import calendar from './components/calendar/calendar';
 import loading from './components/loading/loading';
 import DateRange from './components/daterange'
-
+import imgvertify from './components/imgvertify/imgvertify.vue';
 
 const hex = {
     Affix,
@@ -113,7 +113,8 @@ const hex = {
     Tree,
     Upload,
     Step,
-    DateRange
+    DateRange,
+    imgvertify
 };
 
 const install = function (Vue, opts = {}) {

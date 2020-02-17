@@ -165,6 +165,11 @@ router.map({
             require(['./routers/calendar.vue'], resolve);
         }
     },
+    '/imgvertify': {
+        component: function (resolve) {
+            require(['./routers/imgvertify.vue'], resolve);
+        }
+    },
     '/loading': {
         component: function (resolve) {
             require(['./routers/loading.vue'], resolve);
