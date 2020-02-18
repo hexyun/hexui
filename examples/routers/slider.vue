@@ -1,6 +1,7 @@
 <template>
     <div style="width: 540px;margin:100px;">
         {{ value }}
+        {{ value2 }}
         <!-- <Slider @on-change="change" @on-input="input" :step="15"></Slider>
         <Slider :value="40" :tip-format="format"></Slider>
         <Slider :value.sync="value" show-input show-stops range @on-change="change" @on-input="input" :step="13"></Slider>
@@ -18,7 +19,7 @@
         <Slider :value="[20, 50]" show-tip="hover"></Slider>
         <Slider :value="[20, 50]" show-tip="never"></Slider> -->
         <p>新增的</p>
-        <Slider :value="value2" :step="0.1" :min="-10" :max="10" :show-stops="true" :show-input="true" :section-stops="false" @on-input="input" @on-change="change" :show-scale="true"></Slider>
+        <Slider :value.sync="value2" :step="0.1" :min="-10" :max="10" :show-stops="true" :show-input="true" :section-stops="false" @on-input="input" @on-change="change" :show-scale="true"></Slider>
     </div>
 </template>
 <script>
@@ -37,10 +38,10 @@
                 return `进度：${val}%`
             },
             change (data) {
-               console.log(data)
+            //    console.log(data)
             },
             input (value) {
-                console.log(value)
+                // console.log(value)
             }
         }
     }

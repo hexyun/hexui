@@ -40,6 +40,7 @@
                 <div
                     :class="[prefixCls + '-button-wrap']"
                     :style="{left: singlePosition + '%'}"
+                    @touchstart="onSingleButtonDown"
                     @mousedown="onSingleButtonDown">
                     <Tooltip :controlled="dragging" placement="top" :content="tipFormat(value)" :disabled="tipDisabled" :always="showTip === 'always'" v-ref:tooltip>
                         <div :class="buttonClasses"></div>
@@ -299,16 +300,20 @@
                 this.onSingleDragStart(event);
                 window.addEventListener('mousemove', this.onSingleDragging);
                 window.addEventListener('mouseup', this.onSingleDragEnd);
+                window.addEventListener('touchmove', this.onSingleDragging);
+                window.addEventListener('touchend', this.onSingleDragEnd);
             },
             onSingleDragStart (event) {
                 this.dragging = true;
-                this.startX = event.clientX;
+                let x = event.clientX || event.targetTouches[0].clientX;
+                this.startX = x;
                 this.startPos = parseInt(this.singlePosition, 10);
             },
             onSingleDragging (event) {
                 if (this.dragging) {
                     this.$refs.tooltip.visible = true;
-                    this.currentX = event.clientX;
+                    let x = event.clientX || event.targetTouches[0].clientX;
+                    this.currentX = x;
                     const diff = (this.currentX - this.startX) / this.sliderWidth * 100;
                     this.newPos = this.startPos + diff;
                     this.changeSinglePosition(this.newPos);
@@ -321,6 +326,8 @@
                     this.changeSinglePosition(this.newPos);
                     window.removeEventListener('mousemove', this.onSingleDragging);
                     window.removeEventListener('mouseup', this.onSingleDragEnd);
+                    window.removeEventListener('touchmove', this.onSingleDragging);
+                    window.removeEventListener('touchend', this.onSingleDragEnd);
                 }
             },
             changeSinglePosition (newPos) {
@@ -354,6 +361,8 @@
                 this.onFirstDragStart(event);
                 window.addEventListener('mousemove', this.onFirstDragging);
                 window.addEventListener('mouseup', this.onFirstDragEnd);
+                // window.addEventListener('touchmove', this.onFirstDragging);
+                // window.addEventListener('touchend', this.onFirstDragEnd);
             },
             onFirstDragStart (event) {
                 this.firstDragging = true;
@@ -376,6 +385,8 @@
                     this.changeFirstPosition(this.newPos);
                     window.removeEventListener('mousemove', this.onFirstDragging);
                     window.removeEventListener('mouseup', this.onFirstDragEnd);
+                    // window.removeEventListener('touchmove', this.onFirstDragging);
+                    // window.removeEventListener('touchup', this.onFirstDragEnd);
                 }
             },
             changeFirstPosition (newPos) {
@@ -404,6 +415,8 @@
                 this.onSecondDragStart(event);
                 window.addEventListener('mousemove', this.onSecondDragging);
                 window.addEventListener('mouseup', this.onSecondDragEnd);
+                // window.addEventListener('touchmove', this.onSecondDragging);
+                // window.addEventListener('touchend', this.onSecondDragEnd);
             },
             onSecondDragStart (event) {
                 this.secondDragging = true;
@@ -426,6 +439,8 @@
                     this.changeSecondPosition(this.newPos);
                     window.removeEventListener('mousemove', this.onSecondDragging);
                     window.removeEventListener('mouseup', this.onSecondDragEnd);
+                    // window.removeEventListener('touchmove', this.onSecondDragging);
+                    // window.removeEventListener('touchend', this.onSecondDragEnd);
                 }
             },
             changeSecondPosition (newPos) {
