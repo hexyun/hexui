@@ -56,6 +56,7 @@ li + li {
                 <li><a v-link="'/loading'">Loading</a></li>
                 <li><a v-link="'/daterange'">DateRange</a></li>
                 <li><a v-link="'/imgvertify'">Imgvertify</a></li>
+                <li><a v-link="'/mobileInput'">mobileInput</a></li>
             </ul>
         </nav>
         <router-view></router-view>

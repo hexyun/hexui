@@ -180,10 +180,15 @@ router.map({
             require(['./routers/daterange.vue'], resolve);
         }
     },
+    '/mobileInput': {
+        component: function (resolve) {
+            require(['./routers/mobileInput.vue'], resolve);
+        }
+    },
     '*': {
-		    component: function (resolve) {
-				    require(['./routers/notice.vue'], resolve);
-		    }
+        component: function (resolve) {
+            require(['./routers/notice.vue'], resolve);
+        }
     }
 });
 

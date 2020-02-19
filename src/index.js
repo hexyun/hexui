@@ -47,6 +47,7 @@ import calendar from './components/calendar/calendar';
 import loading from './components/loading/loading';
 import DateRange from './components/daterange'
 import imgvertify from './components/imgvertify/imgvertify.vue';
+import MobileInput from './components/mobileInput/mobileInput.vue';
 
 const hex = {
     Affix,
@@ -114,7 +115,8 @@ const hex = {
     Upload,
     Step,
     DateRange,
-    imgvertify
+    imgvertify,
+    MobileInput
 };
 
 const install = function (Vue, opts = {}) {
