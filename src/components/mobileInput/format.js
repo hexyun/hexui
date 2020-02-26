@@ -64,11 +64,9 @@ const decimal = val => {
 
 // 整数
 const integer = val => {
-  val = val.replace(/\\D/g, '');
-  val = val.replace(/^[0][0]+/g, '0');
-  val = val.replace(/^0([^0])/, function($0, $1) {
-    return $1;
-  })
+  val = val.replace(/[\D|\.]/g, '')
+    .replace(/^[0][0]+/g, '0')
+    .replace(/^0([^0])/, ($0, $1) => $1)
   return val
 }
 
