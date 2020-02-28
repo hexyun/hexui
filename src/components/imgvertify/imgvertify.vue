@@ -134,6 +134,9 @@ import Vue from 'vue';
                         if (verified) {
                            addClass(this.sliderContainerDom, 'sliderContainer_success')
                            this.$emit('success')
+                           setTimeout(() => {
+                             this.onRefresh()
+                           }, 2000)
                         } else {
                             addClass(this.sliderContainerDom, 'sliderContainer_fail')
                             this.$emit('fail')

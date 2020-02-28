@@ -16,7 +16,7 @@
       </div>
       <div class="dataList" v-for="item in dataList">
         <div>{{item.key}}</div>
-        <div :class></div>
+        <div></div>
       </div>
     </div>
     <div class="modal" v-if="show" @click="cancelSelect"></div>
