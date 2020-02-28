@@ -185,6 +185,11 @@ router.map({
             require(['./routers/mobileInput.vue'], resolve);
         }
     },
+    '/mobileRadio': {
+        component: function (resolve) {
+            require(['./routers/mobileRadio.vue'], resolve);
+        }
+    },
     '*': {
         component: function (resolve) {
             require(['./routers/notice.vue'], resolve);

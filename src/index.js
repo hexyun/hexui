@@ -48,6 +48,7 @@ import loading from './components/loading/loading';
 import DateRange from './components/daterange'
 import imgvertify from './components/imgvertify/imgvertify.vue';
 import MobileInput from './components/mobileInput/mobileInput.vue';
+import MobileRadio from './components/mobileRadio/mobileRadio.vue';
 
 const hex = {
     Affix,
@@ -116,7 +117,8 @@ const hex = {
     Step,
     DateRange,
     imgvertify,
-    MobileInput
+    MobileInput,
+    MobileRadio
 };
 
 const install = function (Vue, opts = {}) {
