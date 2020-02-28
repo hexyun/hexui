@@ -77,10 +77,6 @@ export default {
       type: String,
       default: ""
     },
-    textAlign: {
-      type: String,
-      default: 'left'
-    },
     showWarning: {
       type: Boolean,
       default: false
@@ -106,6 +102,12 @@ export default {
         if (val) {
           this.showValue = FORMAT[this.dataType] ? FORMAT[this.dataType](val || '') : val;
         }
+      }
+    },
+    showWarning(val) {
+      if (val) {
+        if(this.actualValue) this.warningMsg = '格式不正确'
+        else this.warningMsg = '不能为空'
       }
     }
   },
@@ -140,7 +142,7 @@ export default {
     blur() {
       setTimeout(() => {
         this.focus = false;
-      }, 100)
+      }, 300)
     }
   },
   computed: {
@@ -161,8 +163,6 @@ export default {
       if (this.dataType === 'email') return 'email'
       if (this.dataType === 'password') return 'password'
       if (this.dataType === 'phone') return 'tel'
-      let number = ['number', 'blank']
-      if (number.indexOf(this.dataType) > -1) return 'number'
       return 'text'
     }
   }
@@ -170,5 +170,116 @@ export default {
 </script>
 
 <style lang="less" scoped>
-
+.FS {
+  font-size: 16pt;
+}
+.hex-mobile-input {
+  // 输入框 所在行  基础样式
+  .input-group {
+    background-color: white;
+    width: 100%;
+    min-height: 50pt;
+    padding: 14pt 0 14pt 18pt;
+    display: flex;
+    position: relative;
+    > div {
+      padding-right: 36pt;
+    }
+    .title {
+      color: #333333;
+      display: inline-block;
+      .FS;
+      white-space: nowrap;
+      margin-right: 16pt;
+      span {
+        color: #f00;
+        position: absolute;
+        left: 7pt;
+        transform: translateY(4pt);
+      }
+      .icon {
+        position: relative;
+        right: 0;
+        top: 0;
+      }
+    }
+    .input {
+      border: none;
+      color: #333333;
+      .FS;
+      width: 100%;
+      caret-color: rgba(119, 156, 251, 1);
+      &:focus {
+        outline: none;
+      }
+      &::-webkit-input-placeholder{
+        color: rgba(153, 153, 153, 1);
+      }
+    }
+    .icon {
+      display: inline-block;
+      position: absolute;
+      right: 18pt;
+      width: 16px;
+      height: 16px;
+      font-size: 16px;
+      color: rgba(0, 0, 0, 0.22);
+      background-repeat: no-repeat;
+      background-size: 100%;
+      background-position: center center;
+      top: 20pt;
+    }
+  }
+  // 文字警告
+  .warning-group-text {
+    padding-bottom: 4pt;
+    .warning {
+      margin-top: 2pt;
+      color: rgba(230, 67, 64, 1);
+    }
+  }
+  // 提示字警告
+  .warning-group-placeholder {
+    .input::-webkit-input-placeholder {
+      color: rgba(230, 67, 64, 1);
+    }
+  }
+  // 没有右侧图标
+  .no-icon > div {
+    padding-right: 18pt;
+  }
+  
+  // 附件信息
+  .explain {
+    color: rgba(204, 204, 204, 1);
+    font-size: 12pt;
+    padding-left: 18pt;
+    background-color: rgba(245, 245, 245, 1);
+    width: 100%;
+  }
+  // 禁用
+  .disabled {
+    .title {
+      color: rgba(153, 153, 153, 1);
+    }
+    .input {
+      background-color: #fff;
+    }
+  }
+  // 分割线
+  .line {
+    height: 0;
+    border: 0.25pt solid rgba(238, 238, 238, 1);
+    margin-left: 18pt;
+  }
+  // 右对齐
+  .right {
+    .input, .warning{
+      text-align: right;
+    }
+    > div {
+      padding-right: 18pt;
+    }
+  }
+}
 </style>

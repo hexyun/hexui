@@ -35,14 +35,14 @@
       title="银行卡"
       clearable
       :must-fill="true"
-      :show-warning="true"
+      :show-warning="showW"
       text-align="right"
       data-type="bank"
       placeholder="请输入用户名"
     ></mobile-input>
     <mobile-input
       title="数字"
-      :show-warning="true"
+      :show-warning="showW"
       :warning-type="'text'"
       :must-fill="true"
       text-align="right"
@@ -58,7 +58,7 @@
     ></mobile-input>
     <mobile-input
       title="整数"
-      :show-warning="true"
+      :show-warning="showW"
       :must-fill="true"
       data-type="integer"
       placeholder="请输入用户名"
@@ -81,6 +81,7 @@
       data-type="password"
       placeholder="请输入用户名"
     ></mobile-input>
+    <div @click="sss">aaaa</div>
   </div>
 </template>
 
@@ -88,13 +89,14 @@
 export default {
   data () {
     return {
-      value: '123'
+      value: '123',
+      showW: false
     }
   },
   methods: {
     sss () {
       console.log(this.value);
-      
+      this.showW = !this.showW
     },
     input () {
       console.log(this.value, '父组件 $emit');
