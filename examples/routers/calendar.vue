@@ -1,14 +1,15 @@
 <template>
-<div>
-    <calendar 
-    :things="things"
-    :prefab="prefab"
-    :max="max"
-    @selected-day="selsectedDay"
-    color=""
-    style="height: 1000px"
-    @selected-thing="selectedThing"></calendar>
-    <i-button @click="add">添加事情</i-button>
+    <div>
+        <i-button @click="changePrefab">修改初始时间</i-button>
+        <calendar 
+            :things="things"
+            :prefab="prefab"
+            :max="max"
+            @selected-day="selsectedDay"
+            color=""
+            style="height: 1000px"
+            @selected-thing="selectedThing">
+        </calendar>
     </div>
 </template>
 <script>
@@ -68,6 +69,9 @@
                 { name: '不知干啥', time: 1566790378315 },
                 { name: '知道干啥', time: 1566790378315 }]
             }];
+            },
+            changePrefab() {
+                this.prefab = '2019-09-09'
             }
         }
     }

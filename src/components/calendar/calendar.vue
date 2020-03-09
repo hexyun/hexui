@@ -482,6 +482,20 @@ export default {
     recreat () {
       console.log('bian');
       this.isHaveThing();
+    },
+    prefab (val) {
+      if (val) {
+        let prefab = new Date(val);
+        this.currentYear = prefab.getFullYear();
+        this.currentM = prefab.getMonth();
+        this.currentMonth = prefab.getMonth();
+        this.currentDay = prefab.getDate();
+        this.showCalender('prefab');
+        this.isHaveThing();
+      } else {
+        this.showCalender();
+        this.isHaveThing();
+      }
     }
   }
 }
