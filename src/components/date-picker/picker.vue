@@ -488,7 +488,9 @@
                     this.internalValue = this.formatTime(val);
                 } else if (val && Array.isArray(val) && val.length === 2) {
                     this.internalValue = val;
-                } else {
+                } else if(val && typeof val === 'string'){
+                    this.internalValue = val
+                } else if(!val) {
                     this.internalValue = ''
                 }
             },

@@ -32,10 +32,10 @@
                 console.log(this.internalValue, this.prefab)
             },
             showTime() {
-                this.internalValue = 1567421316714;
+                this.internalValue = '2019-09-09 05:06';
             },
             showTime2() {
-                this.internalValue = 1568275833650;
+                this.internalValue = '2019-09-09 15:06';
             },
             clearTime() {
                 this.internalValue = null;
