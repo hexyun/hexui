@@ -236,7 +236,7 @@
                         if (this.type === 'datetimerange' && Array.isArray(this.prefabtime) && this.prefabtime.length === 2) {
                             value = this.prefabtime
                         } else
-                            value = this.formatTime(parseInt(this.prefabtime));
+                            value = this.formatTime(this.prefabtime);
                     }
                     // --------------------------
                     if (!value) return;
@@ -420,6 +420,7 @@
                 this.picker.resetView && this.picker.resetView();
             },
             emitChange (date) {
+                console.log(date, '传来的时间', this.type)
                 const type = this.type;
                 const format = this.format || DEFAULT_FORMATS[type];
                 const formatter = (
@@ -440,7 +441,11 @@
                     newDate = stamp.getTime() || '';
                     this.prefabtime = newDate || 0;
                 }
-                this.$emit('get-time', this.prefabtime);
+                if(this.type === 'datetime') {
+                    this.$emit('get-time', date);
+                } else {
+                    this.$emit('get-time', this.prefabtime);
+                }
                 this.$emit('on-change', this.prefabtime);
                 this.$dispatch('on-form-change', newDate);
             },
