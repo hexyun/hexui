@@ -10,7 +10,7 @@
     <div>年-月-日</div>
     <Date-picker type="datetime" format="yyyy-MM-dd" placeholder="选择日期和时间"></Date-picker>
     <div>时:分</div>
-    <Date-picker type="datetime" prefabtime="2019-09-09 05:06" format="HH:mm" placeholder="选择日期和时间" @get-time="getTime"></Date-picker>
+    <Date-picker type="datetime" :prefabtime.sync="internalValue"  format="HH:mm" placeholder="选择日期和时间" @get-time="getTime"></Date-picker>
     
     
     <i-button @click="showTime">显示时间</i-button>

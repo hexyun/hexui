@@ -488,6 +488,8 @@
                     this.internalValue = this.formatTime(val);
                 } else if (val && Array.isArray(val) && val.length === 2) {
                     this.internalValue = val;
+                } else {
+                    this.internalValue = ''
                 }
             },
             value: {
