@@ -420,7 +420,7 @@
                 this.picker.resetView && this.picker.resetView();
             },
             emitChange (date) {
-                console.log(date, '传来的时间', this.type)
+                console.log('data - emit', date)
                 const type = this.type;
                 const format = this.format || DEFAULT_FORMATS[type];
                 const formatter = (
@@ -441,7 +441,8 @@
                     newDate = stamp.getTime() || '';
                     this.prefabtime = newDate || 0;
                 }
-                if(this.type === 'datetime') {
+                if(this.type === 'datetime' && this.format == 'HH:mm') {
+                    this.prefabtime = '2020/10/10 ' + date;  // 年月日补位
                     this.$emit('get-time', date);
                 } else {
                     this.$emit('get-time', this.prefabtime);
@@ -450,13 +451,14 @@
                 this.$dispatch('on-form-change', newDate);
             },
             formatTime (t) {
+                const type = (this.format && this.format.indexOf('-')) > -1 ? '-' : '/';
                 if (!t) return '';
                 let date = new Date(t);
                 const prefixZero = function (num) {
                     return num >= 10 ? num : '0' + num;
                 };
-                return date.getFullYear() + '-' +
-                    prefixZero(date.getMonth() + 1) + '-' +
+                return date.getFullYear() + type +
+                    prefixZero(date.getMonth() + 1) + type +
                     prefixZero(date.getDate()) + ' ' +
                     prefixZero(date.getHours()) + ':' +
                     prefixZero(date.getMinutes()) + ':' +
@@ -488,11 +490,12 @@
                     this.internalValue = this.formatTime(val);
                 } else if (val && Array.isArray(val) && val.length === 2) {
                     this.internalValue = val;
-                } else if(val && typeof val === 'string'){
+                } else if(val && this.type === 'datetime'){
                     this.internalValue = val
-                } else if(!val) {
+                } else if(val !== 0 && !val) {
                     this.internalValue = ''
                 }
+                console.log('watch',this.internalValue, val, this.type)
             },
             value: {
                 immediate: true,

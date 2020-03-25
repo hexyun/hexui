@@ -190,6 +190,11 @@ router.map({
             require(['./routers/mobileRadio.vue'], resolve);
         }
     },
+    '/mobileDate': {
+        component: function (resolve) {
+            require(['./routers/mobileDate.vue'], resolve);
+        }
+    },
     '*': {
         component: function (resolve) {
             require(['./routers/notice.vue'], resolve);

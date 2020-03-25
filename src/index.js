@@ -50,7 +50,9 @@ import imgvertify from './components/imgvertify/imgvertify.vue';
 import MobileInput from './components/mobileInput/mobileInput.vue';
 import MobileRadio from './components/mobileRadio/mobileRadio.vue';
 
+import mobileDate from './components/mobileDate/mobileDate.vue';
 const hex = {
+    mobileDate,
     Affix,
     Alert,
     BackTop,

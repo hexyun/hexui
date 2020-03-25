@@ -58,6 +58,7 @@ li + li {
                 <li><a v-link="'/imgvertify'">Imgvertify</a></li>
                 <li><a v-link="'/mobileInput'">mobileInput</a></li>
                 <li><a v-link="'/mobileRadio'">mobileRadio</a></li>
+                <li><a v-link="'/mobileDate'">mobileDate</a></li>
             </ul>
         </nav>
         <router-view></router-view>
