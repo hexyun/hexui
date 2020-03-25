@@ -20,7 +20,7 @@
         </template>
       </div>
     </div>
-    <date-picker v-if="show" @close="show = false" @finish="finish" :prefab="date"></date-picker>
+    <date-picker></date-picker>
     <div class="baffle" v-if="show"></div>
   </div>
 </template>
