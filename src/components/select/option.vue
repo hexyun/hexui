@@ -56,7 +56,14 @@
             },
             queryChange (val) {
                 const parsedQuery = val.replace(/(\^|\(|\)|\[|\]|\$|\*|\+|\.|\?|\\|\{|\}|\|)/g, '\\$1');
-                this.hidden = !new RegExp(parsedQuery, 'i').test(this.searchLabel);
+                this.hidden = false;
+                // 可搜索时允许顺序错误
+                for(let i = 0; i < parsedQuery.length; i++) {
+                    if(this.searchLabel.indexOf(parsedQuery[i]) == -1) {
+                        this.hidden = true;
+                        break;
+                    }
+                }
             }
         },
         compiled () {
