@@ -3,7 +3,8 @@
         <div :class="[prefixCls + '-sidebar']" v-if="shortcuts.length">
             <div
                 :class="[prefixCls + '-shortcut']"
-                v-for="shortcut in shortcuts"
+                v-for="shortcut in shortcuts" 
+                :key='shortcut'
                 @click="handleShortcutClick(shortcut)">{{ shortcut.text }}</div>
         </div>
         <div :class="[prefixCls + '-body']">
@@ -391,7 +392,7 @@
 //                if (!this.showTime) {
 //                    this.handleConfirm(false);
 //                }
-                this.handleConfirm(false);
+                this.handleConfirm(true);
             },
             handleChangeRange (val) {
                 this.minDate = val.minDate;

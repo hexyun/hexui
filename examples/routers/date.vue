@@ -4,7 +4,7 @@
     <Date-picker type="datetime" format="yyyy/MM/dd HH:mm:ss" :prefabtime.sync="internalValue" placeholder="选择日期和时间" @get-time="getTime"></Date-picker>
 
     <br>
-    <Date-picker type="daterange" placeholder="选择日期和时间" style="width: 300px"></Date-picker>
+    <Date-picker type="daterange" placeholder="请选择日期和时间"  style="width: 300px" ></Date-picker>
     <br>
     <Date-picker type="datetimerange" format="yyyy/MM/dd HH:mm" :prefabtime.sync="prefab" placeholder="选择日期和时间（不含秒）" style="width: 300px" @get-time="getTime"></Date-picker>
     <div>年-月-日</div>
