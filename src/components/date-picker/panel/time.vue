@@ -2,9 +2,9 @@
     <div :class="[prefixCls + '-body-wrapper']">
         <div :class="[prefixCls + '-body']" id="time-right">
             <div :class="[timePrefixCls + '-header']" v-if="showDate">
-                <span class="hours">时</span>
-                <span class="min">分</span>
-                <span class='time-seconds' v-show="showSeconds">秒</span>
+                <span class="hours">{{ t('i.datepicker.h') }}</span>
+                <span class="min">{{ t('i.datepicker.m') }}</span>
+                <span class='time-seconds' v-show="showSeconds">{{ t('i.datepicker.s') }}</span>
             </div>
             <div :class="[prefixCls + '-content']">
                 <time-spinner

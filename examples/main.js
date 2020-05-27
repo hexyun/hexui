@@ -5,8 +5,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from './app.vue';
 import hexui from '../src/index';
-// import locale from '../src/locale/lang/en-US';
-import locale from '../src/locale/lang/zh-CN';
+import locale from '../src/locale/lang/en-US';
+// import locale from '../src/locale/lang/zh-CN';
 
 Vue.use(VueRouter);
 Vue.use(hexui, { locale });
@@ -208,7 +208,7 @@ router.beforeEach(function () {
 
 router.afterEach(function (transition) {
 
-});
+}); 
 
 router.redirect({
     '*': "/button"

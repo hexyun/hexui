@@ -1,6 +1,7 @@
 // https://github.com/ElemeFE/element/blob/dev/src/locale/index.js
 
 import defaultLang from './lang/zh-CN';
+import Enlang from './lang/en-US';
 import Vue from 'vue';
 import deepmerge from 'deepmerge';
 import Format from './format';
@@ -46,5 +47,4 @@ export const use = function(l) {
 export const i18n = function(fn) {
     i18nHandler = fn || i18nHandler;
 };
-
-export default { use, t, i18n };
+export default { use, t, i18n, zh: defaultLang, en: Enlang };

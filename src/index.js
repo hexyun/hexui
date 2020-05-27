@@ -139,7 +139,13 @@ const install = function (Vue, opts = {}) {
 
 // auto install
 if (typeof window !== 'undefined' && window.Vue) {
-    install(window.Vue);
+    let lang = locale.zh    
+    if (typeof window.Cookies === 'function') {
+        lang = locale[window.Cookies.get('localization') || 'zh']
+    }
+    install(window.Vue, {
+        locale: lang
+    });
 }
 
 module.exports = Object.assign(hex, {install});   // eslint-disable-line no-undef
