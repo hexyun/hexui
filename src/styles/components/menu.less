@@ -159,12 +159,15 @@
     &-submenu-title-icon {
         transition: transform @transition-time @ease-in-out;
     }
-    &-opened &-submenu-title-icon{
+    &-opened > &-submenu-title > &-submenu-title-icon{
         transform: rotate(180deg);
     }
 
-    &-vertical &-submenu &-item{
+    &-vertical &-submenu &-item,&-vertical &-submenu &-submenu &-submenu-title{
         padding-left: 43px;
+    }
+    &-vertical &-submenu &-submenu &-item{
+        padding-left: 62px;
     }
     &-vertical &-item-group{
         &-title{

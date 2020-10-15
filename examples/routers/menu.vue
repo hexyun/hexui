@@ -1,33 +1,43 @@
 <template>
-    <Menu mode="horizontal" :theme="theme1" :active-key.sync="ak">
-        <Menu-item key="1">
-            <Icon type="ios-paper"></Icon>
-            内容管理
-        </Menu-item>
-        <Menu-item key="2">
-            <Icon type="ios-people"></Icon>
-            用户管理
-        </Menu-item>
-        <Submenu key="3">
+    <Menu :active-name.sync="ak" :open-names="['1']">
+        <Submenu key="1">
             <template slot="title">
-                <Icon type="stats-bars"></Icon>
-                统计分析
+                <!-- <Icon type="ios-analytics" />  不支持省略写法-->
+                <Icon type="ios-analytics"></Icon>
+                Navigation One
             </template>
-            <Menu-group title="使用">
-                <Menu-item key="3-1">新增和启动</Menu-item>
-                <Menu-item key="3-2">活跃分析</Menu-item>
-                <Menu-item key="3-3">时段分析</Menu-item>
-            </Menu-group>
-            <Menu-group title="留存">
-                <Menu-item key="3-4">用户留存</Menu-item>
-                <Menu-item key="3-5">流失用户</Menu-item>
+            <Menu-group title="Item 1">
+                <Menu-item key="1-1">Option 1</Menu-item>
+                <Menu-item key="1-2">Option 2</Menu-item>
+                <Menu-item key="1-3">Option 3</Menu-item>
+                <Menu-item key="1-4">Option 4</Menu-item>
             </Menu-group>
         </Submenu>
-        <Menu-item key="4">
-            <Icon type="settings"></Icon>
-            综合设置
-        </Menu-item>
+        <Submenu key="2">
+            <template slot="title">
+                <Icon type="ios-filing"></Icon>
+                Navigation Two  1
+            </template>
+            <Menu-item key="2-1">2-1</Menu-item>
+            <Menu-item key="2-2">2-2</Menu-item>
+            <Submenu key="3">
+                <template slot="title">2-3</template>
+                <Menu-item key="3-1">3-1</Menu-item>
+                <Menu-item key="3-2">3-2</Menu-item>
+            </Submenu>
+        </Submenu>
+        <Submenu key="4">
+            <template slot="title">
+                <Icon type="ios-cog"></Icon>
+                Navigation Three
+            </template>
+            <Menu-item key="4-1">Option 9</Menu-item>
+            <Menu-item key="4-2">Option 10</Menu-item>
+            <Menu-item key="4-3">Option 11</Menu-item>
+            <Menu-item key="4-4">Option 12</Menu-item>
+        </Submenu>
     </Menu>
+
     <br>
     <p>切换主题</p>
     <Radio-group :model.sync="theme1">
@@ -42,7 +52,7 @@
         data () {
             return {
                 theme1: 'light',
-                ak: '1'
+                ak: '1-2'
             }
         }
     }
