@@ -29,32 +29,7 @@
     </Row>
 </template>
 <script>
-const cityList = [
-    {
-        value: 'beijing',
-        label: '北京市'
-    },
-    {
-        value: 'shanghai',
-        label: '上海市'
-    },
-    {
-        value: 'shenzhen',
-        label: '深圳市'
-    },
-    {
-        value: 'hangzhou',
-        label: '杭州市'
-    },
-    {
-        value: 'nanjing',
-        label: '南京市'
-    },
-    {
-        value: 'chongqing',
-        label: '重&庆市'
-    }
-]
+const cityList = [{"label":"13233874274","value":"13233874274"},{"label":"13083595729","value":"13083595729"},{"label":"13321062885","value":"13321062885"},{"label":"13038676872","value":"13038676872"},{"label":"18727776566","value":"18727776566"},{"label":"18986020095","value":"18986020095"},{"label":"13348954743","value":"13348954743"},{"label":"13711080573","value":"13711080573"},{"label":"18985695449","value":"18985695449"},{"label":"18910134435","value":"18910134435"}]
     export default {
         data () {
             return {

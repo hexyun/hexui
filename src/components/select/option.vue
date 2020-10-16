@@ -59,7 +59,11 @@
                 this.hidden = false;
                 // 可搜索时允许顺序错误
                 for(let i = 0; i < parsedQuery.length; i++) {
-                    if(this.searchLabel.indexOf(parsedQuery[i]) == -1) {
+                    // if(this.searchLabel.indexOf(parsedQuery[i]) == -1) {
+                    //     this.hidden = true;
+                    //     break;
+                    // }
+                    if (this.searchLabel.indexOf(val) == -1) {
                         this.hidden = true;
                         break;
                     }
