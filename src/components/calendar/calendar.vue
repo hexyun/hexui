@@ -164,7 +164,6 @@ export default {
       this.nextDays = []
       const time = new Date()
       time.setFullYear(this.year, 1, 0)
-      console.log(this.year,this.month);
       for (let i = 1; i <= time.getDate(); i++) {
         this.days.push({gregorian: i, lunar: this.getLunarDay(this.year, this.month, i)})
       }
@@ -184,9 +183,6 @@ export default {
           this.nextDays.push({gregorian: i, lunar: this.getLunarDay(this.year , this.month + 1, i)})
         }
       }
-      console.log('preDays', this.preDays);
-      console.log('days',this.days);
-      console.log('nextDays', this.nextDays);
     },
     getLunarDay (solarYear, solarMonth, solarDay) {
       const madd = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
@@ -244,20 +240,24 @@ export default {
       return 29 + ((m >> n) & 1)
     },
     isHaveThing () {
-      console.log(this.havething);
       if (this.havething) {
       if (!this.thingdate) {
         return;
       } else {
+
         this.list.map((item, index) => {
-          this.thingdate.map((itemThing) => {
-            if (item.y + '/' + item.m + '/' + item.d == itemThing) {
-              this.list.$set(index, {...this.list[index], thingdate: true})
-            }
-            return this.list;
-          })
+          if (this.thingdate.find(itemThing => item.y + '/' + item.m + '/' + item.d == itemThing)) {
+            this.list.$set(index, {...this.list[index], thingdate: true})
+          } else {
+            this.list.$set(index, {...this.list[index], thingdate: false})
+          }
+          // this.thingdate.map((itemThing) => {
+          //   if (item.y + '/' + item.m + '/' + item.d == itemThing) {
+          //     this.list.$set(index, {...this.list[index], thingdate: true})
+          //   }
+          //   return this.list;
+          // })
         })
-        console.log(this.list);
       }
     } else {
       console.log('不显示红点');
@@ -304,7 +304,6 @@ export default {
           })
         }
       }
-      console.log('list', this.list);
       this.firstnow = this.firstDay.getDay() // 当月第一日是星期几 1-7
       if (this.firstnow === 0) this.firstnow = 7
       if (this.firstnow > 1) {
@@ -480,7 +479,6 @@ export default {
       this.isHaveThing();
     },
     recreat () {
-      console.log('bian');
       this.isHaveThing();
     },
     prefab (val) {
@@ -496,6 +494,9 @@ export default {
         this.showCalender();
         this.isHaveThing();
       }
+    },
+    thingdate (e) {
+      this.isHaveThing();
     }
   }
 }
