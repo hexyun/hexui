@@ -19,10 +19,11 @@
                         expand: true,
                         disabled: true,
                         children: [{
-                            title: 'leaf',
-                            disableCheckbox: true
+                            title: 'leaf1'
                         }, {
-                            title: 'leaf',
+                            title: 'leaf2',
+                        }, {
+                            title: 'leaf3',
                         }]
                     }, {
                         title: 'parent 1-1',

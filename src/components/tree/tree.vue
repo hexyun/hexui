@@ -260,11 +260,12 @@
                 for (let [i,item] of this.data.entries()) {
                     if (this.key + '.' + i == key) {
                         let temp = this.getChildrenCheckedStatus(item.children);
+                        // 在选中状态不需要更改的时候checked事件也得穿透出去,否侧会造成不能触发on-check-change的bug
                         if (temp != item.childrenCheckedStatus) {
                             this.$set(`data[${i}].checked`, !!temp);
                             this.$set(`data[${i}].childrenCheckedStatus`, temp);
-                            if (this.key !== '0') this.$dispatch('childChecked', this, this.key);
                         }
+                        if (this.key !== '0') this.$dispatch('childChecked', this, this.key);
                     }
                 }
             });
