@@ -23,6 +23,7 @@
                 @blur="blur"
                 @keydown.stop="keyDown"
                 @change="change"
+                @input="change($event, 'input')"
                 :value="value">
         </div>
     </div>
@@ -194,10 +195,14 @@
                 }
                 this.setValue(val);
             },
-            setValue (val) {
+            setValue (val, type) {
                 this.$nextTick(() => {
                     this.value = val;
-                    this.$emit('on-change', val);
+                    if (type === 'input') {
+                        this.$emit('on-input', val);
+                        } else {
+                        this.$emit('on-change', val);
+                    }
                     this.$dispatch('on-form-change', val);
                 });
             },
@@ -216,7 +221,7 @@
                     this.down(e);
                 }
             },
-            change (event) {
+            change (event, type) {
                 let val = event.target.value.trim();
 
                 const max = this.max;
@@ -227,11 +232,11 @@
                     this.value = val;
 
                     if (val > max) {
-                        this.setValue(max);
+                        this.setValue(max, type);
                     } else if (val < min) {
-                        this.setValue(min);
+                        this.setValue(min, type);
                     } else {
-                        this.setValue(val);
+                        this.setValue(val, type);
                     }
                 } else {
                     event.target.value = this.value;

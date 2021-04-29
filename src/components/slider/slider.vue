@@ -7,7 +7,7 @@
             :step="step"
             :value="value"
             :disabled="disabled"
-            @on-change="handleInputChange"></Input-number>
+            @on-input="handleInputChange"></Input-number>
         <div :class="[prefixCls + '-wrap']" v-el:slider @click.self="sliderClick">
             <!-- 默认的步长点 -->
             <template v-if="showStops">
@@ -207,7 +207,7 @@
                     result.push(i);
                 }
                 console.log(result);
-                
+
                 return result;
             },
             sliderWidth () {
@@ -333,8 +333,8 @@
             changeSinglePosition (newPos) {
                 if (newPos >= 0 && (newPos <= 100)) {
                     const lengthPerStep = 100 / ((this.max - this.min) / this.step);
-                    const steps = Math.round(newPos / lengthPerStep);       
-                    this.value = Math.round((steps * lengthPerStep * (this.max - this.min) * 0.01 + this.min) * 10) / 10;          
+                    const steps = Math.round(newPos / lengthPerStep);
+                    this.value = Math.round((steps * lengthPerStep * (this.max - this.min) * 0.01 + this.min) * 10) / 10;
                     this.setSinglePosition(this.value);
                     if (!this.dragging) {
                         if (this.value !== this.oldSingleValue) {
