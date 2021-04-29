@@ -349,6 +349,7 @@
                 this.singlePosition = (val - this.min) / (this.max - this.min) * 100;
             },
             handleInputChange (val) {
+                console.log(val);
                 this.value = val;
                 this.setSinglePosition(val);
                 this.$emit('on-change', this.value);

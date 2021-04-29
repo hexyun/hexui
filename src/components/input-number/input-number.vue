@@ -23,7 +23,7 @@
                 @blur="blur"
                 @keydown.stop="keyDown"
                 @change="change"
-                @input="change($event, 'input')"
+                @input="input"
                 :value="value">
         </div>
     </div>
@@ -209,8 +209,9 @@
             focus () {
                 this.focused = true;
             },
-            blur () {
+            blur (event) {
                 this.focused = false;
+                this.change(event)
             },
             keyDown (e) {
                 if (e.keyCode === 38) {
@@ -221,7 +222,7 @@
                     this.down(e);
                 }
             },
-            change (event, type) {
+            change (event) {
                 let val = event.target.value.trim();
 
                 const max = this.max;
@@ -232,15 +233,20 @@
                     this.value = val;
 
                     if (val > max) {
-                        this.setValue(max, type);
+                        this.setValue(max);
                     } else if (val < min) {
-                        this.setValue(min, type);
+                        this.setValue(min);
                     } else {
-                        this.setValue(val, type);
+                        this.setValue(val);
                     }
                 } else {
                     event.target.value = this.value;
                 }
+            },
+            input (event) {
+                let val = event.target.value.trim();
+                val = parseFloat(val) || 0;
+                this.setValue(val, 'input');
             },
             changeVal (val) {
                 if (isValueNumber(val) || val === 0) {
