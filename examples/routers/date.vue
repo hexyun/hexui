@@ -1,5 +1,5 @@
 <template>
-    <Date-picker type="datetime" format="yyyy-MM-dd HH:mm" prefabtime="2019-09-09 05:06" placeholder="选择日期和时间" @get-time="getTime"></Date-picker>
+    <Date-picker type="datetime" format="HH:mm" prefabtime="2019-09-09 05:06" placeholder="选择日期和时间" @get-time="getTime"></Date-picker>
     <br>
     <Date-picker type="datetime" format="yyyy/MM/dd HH:mm:ss" :prefabtime.sync="internalValue" placeholder="选择日期和时间" @get-time="getTime"></Date-picker>
 
@@ -11,8 +11,8 @@
     <Date-picker type="datetime" format="yyyy/MM/dd" placeholder="选择日期和时间"></Date-picker>
     <div>时:分</div>
     <Date-picker type="datetime" :prefabtime.sync="internalValue"  format="HH:mm" placeholder="选择日期和时间" @get-time="getTime"></Date-picker>
-    
-    
+
+
     <i-button @click="showTime">显示时间</i-button>
     <i-button @click="showTime2">再显示时间</i-button>
     <i-button @click="clearTime">清空时间</i-button>

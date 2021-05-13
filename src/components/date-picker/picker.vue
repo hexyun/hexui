@@ -19,11 +19,11 @@
                     :icon="iconType"></i-input>
             </slot>
         </div>
-        <Drop 
+        <Drop
             :class="{'seconds': type === 'datetime' && (format || '').indexOf('ss') > -1, 'onle-time': type === 'datetime' && format === 'HH:mm', 'onle-date': type === 'datetime' && format.indexOf('HH:mm') == -1}"
-            v-show="opened" 
-            :placement="placement" 
-            :transition="transition" 
+            v-show="opened"
+            :placement="placement"
+            :transition="transition"
             v-ref:drop>
             <div v-el:picker></div>
         </Drop>
@@ -371,7 +371,7 @@
                 this.$emit('on-clear');
                 this.$dispatch('on-form-change', '');
             },
-            showPicker () { 
+            showPicker () {
                 if (!this.picker) {
                     const type = this.type;
                     this.picker = new Vue(this.panel).$mount(this.$els.picker);
@@ -442,7 +442,11 @@
                     this.prefabtime = newDate || 0;
                 }
                 if(this.type === 'datetime' && this.format == 'HH:mm') {
-                    this.prefabtime = '2020/10/10 ' + date;  // 年月日补位
+                    if (!date) {
+                        this.prefabtime = '2020/10/10 ' + '00:00'
+                    } else {
+                        this.prefabtime = '2020/10/10 ' + date;  // 年月日补位
+                    }
                     this.$emit('get-time', date);
                 } else {
                     this.$emit('get-time', this.prefabtime);
@@ -556,7 +560,7 @@
     min-width: 430px;
 }
 /* 只显示时间的样式 */
-.onle-time .ivu-picker-confirm, 
+.onle-time .ivu-picker-confirm,
 .onle-time > .ivu-picker-panel-body-wrapper > .ivu-picker-panel-body,
 .onle-time .ivu-picker-confirm{
     width: unset !important;
@@ -567,7 +571,7 @@
 }
 
 /* 只显示日期的样式 */
-.onle-date .ivu-picker-confirm, 
+.onle-date .ivu-picker-confirm,
 .onle-date > .ivu-picker-panel-body-wrapper > .ivu-picker-panel-body,
 .onle-date .ivu-picker-confirm{
     width: unset !important;
