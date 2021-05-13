@@ -331,17 +331,16 @@
                 }
             },
             changeSinglePosition (newPos) {
-                if (newPos >= 0 && (newPos <= 100)) {
-                    const lengthPerStep = 100 / ((this.max - this.min) / this.step);
-                    const steps = Math.round(newPos / lengthPerStep);
-                    this.value = Math.round((steps * lengthPerStep * (this.max - this.min) * 0.01 + this.min) * 10) / 10;
-                    this.setSinglePosition(this.value);
-                    if (!this.dragging) {
-                        if (this.value !== this.oldSingleValue) {
-                            this.$emit('on-change', this.value);
-                            this.$dispatch('on-form-change', this.value);
-                            this.oldSingleValue = this.value;
-                        }
+                const n = Math.max(0, Math.min(newPos, 100))
+                const lengthPerStep = 100 / ((this.max - this.min) / this.step);
+                const steps = Math.round(n / lengthPerStep);
+                this.value = Math.round((steps * lengthPerStep * (this.max - this.min) * 0.01 + this.min) * 10) / 10;
+                this.setSinglePosition(this.value);
+                if (!this.dragging) {
+                    if (this.value !== this.oldSingleValue) {
+                        this.$emit('on-change', this.value);
+                        this.$dispatch('on-form-change', this.value);
+                        this.oldSingleValue = this.value;
                     }
                 }
             },
